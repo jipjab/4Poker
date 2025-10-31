@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { BlindTimer } from '@/components/BlindTimer'
 import { TournamentSettings } from '@/components/TournamentSettings'
 import { AdPlacement } from '@/components/AdPlacement'
+import { FullScreenToggle } from '@/components/FullScreenToggle'
 import type { TournamentConfig } from '@/lib/types'
 import { defaultTournamentConfig } from '@/lib/tournamentConfig'
 import { loadCurrentTournament, saveCurrentTournament } from '@/lib/storage'
@@ -12,6 +13,7 @@ import { loadCurrentTournament, saveCurrentTournament } from '@/lib/storage'
 export default function Home() {
   const [config, setConfig] = useState<TournamentConfig>(defaultTournamentConfig)
   const [showSettings, setShowSettings] = useState(false)
+  const [isFullScreen, setIsFullScreen] = useState(false)
 
   useEffect(() => {
     // Load saved tournament on mount
@@ -19,6 +21,50 @@ export default function Home() {
     if (saved) {
       setConfig(saved)
     }
+  }, [])
+
+  // Keyboard shortcut for fullscreen (F11)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // F11 for fullscreen toggle
+      if (event.key === 'F11') {
+        event.preventDefault()
+        const isCurrentlyFullscreen = !!(
+          document.fullscreenElement ||
+          (document as any).webkitFullscreenElement ||
+          (document as any).mozFullScreenElement ||
+          (document as any).msFullscreenElement
+        )
+        
+        if (isCurrentlyFullscreen) {
+          // Exit fullscreen
+          if (document.exitFullscreen) {
+            document.exitFullscreen()
+          } else if ((document as any).webkitExitFullscreen) {
+            (document as any).webkitExitFullscreen()
+          } else if ((document as any).mozCancelFullScreen) {
+            (document as any).mozCancelFullScreen()
+          } else if ((document as any).msExitFullscreen) {
+            (document as any).msExitFullscreen()
+          }
+        } else {
+          // Enter fullscreen
+          const element = document.documentElement
+          if (element.requestFullscreen) {
+            element.requestFullscreen()
+          } else if ((element as any).webkitRequestFullscreen) {
+            (element as any).webkitRequestFullscreen()
+          } else if ((element as any).mozRequestFullScreen) {
+            (element as any).mozRequestFullScreen()
+          } else if ((element as any).msRequestFullscreen) {
+            (element as any).msRequestFullscreen()
+          }
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
   const handleConfigUpdate = (newConfig: TournamentConfig) => {
@@ -32,6 +78,9 @@ export default function Home() {
       action()
     }
   }
+
+  // Note: Presentation mode will be handled by BlindTimer component
+  // when in fullscreen mode - we don't need a separate timer instance here
 
   return (
     <main className="min-h-screen p-4 md:p-8 bg-background">
@@ -52,15 +101,20 @@ export default function Home() {
               Free Poker Tournament Timer
             </p>
           </Link>
-          <button
-            onClick={() => setShowSettings(!showSettings)}
-            onKeyDown={(e) => handleKeyDown(e, () => setShowSettings(!showSettings))}
-            className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
-            aria-label={showSettings ? 'Hide settings' : 'Show settings'}
-            tabIndex={0}
-          >
-            {showSettings ? 'Hide Settings' : 'Settings'}
-          </button>
+          <div className="flex gap-3 items-center">
+            <FullScreenToggle
+              onToggle={(fullScreen) => setIsFullScreen(fullScreen)}
+            />
+            <button
+              onClick={() => setShowSettings(!showSettings)}
+              onKeyDown={(e) => handleKeyDown(e, () => setShowSettings(!showSettings))}
+              className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
+              aria-label={showSettings ? 'Hide settings' : 'Show settings'}
+              tabIndex={0}
+            >
+              {showSettings ? 'Hide Settings' : 'Settings'}
+            </button>
+          </div>
         </header>
 
         {/* Settings Panel */}
@@ -82,7 +136,11 @@ export default function Home() {
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Main Timer Display */}
           <div className="flex-1 bg-gray-800 rounded-lg shadow-xl p-6 md:p-8">
-            <BlindTimer config={config} onConfigUpdate={handleConfigUpdate} />
+            <BlindTimer 
+              config={config} 
+              onConfigUpdate={handleConfigUpdate}
+              isFullScreen={isFullScreen}
+            />
           </div>
 
           {/* Sidebar Ad - Desktop Only */}

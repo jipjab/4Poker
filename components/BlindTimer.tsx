@@ -8,13 +8,15 @@ import type { TournamentConfig } from '@/lib/types'
 import { BlindDisplay } from './BlindDisplay'
 import { TimerControls } from './TimerControls'
 import { BreakTimer } from './BreakTimer'
+import { PresentationTimer } from './PresentationTimer'
 
 interface BlindTimerProps {
   config: TournamentConfig
   onConfigUpdate?: (config: TournamentConfig) => void
+  isFullScreen?: boolean
 }
 
-export const BlindTimer = ({ config, onConfigUpdate }: BlindTimerProps) => {
+export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: BlindTimerProps) => {
   const [isMuted, setIsMuted] = useState(false)
 
   const timer = useTimer({
@@ -137,6 +139,25 @@ export const BlindTimer = ({ config, onConfigUpdate }: BlindTimerProps) => {
       event.preventDefault()
       action()
     }
+  }
+
+  // Show presentation mode when in fullscreen
+  if (isFullScreen) {
+    return (
+      <PresentationTimer
+        config={config}
+        timeRemaining={timer.timeRemaining}
+        isRunning={timer.isRunning}
+        isPaused={timer.isPaused}
+        currentLevel={timer.currentLevel}
+        totalElapsed={timer.totalElapsed}
+        isBreakActive={timer.isBreakActive}
+        breakTimeRemaining={timer.breakTimeRemaining}
+        onPause={timer.pause}
+        onResume={timer.resume}
+        onStart={timer.start}
+      />
+    )
   }
 
   return (
