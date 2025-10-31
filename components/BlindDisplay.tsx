@@ -18,7 +18,7 @@ export const BlindDisplay = ({
   return (
     <div className="space-y-6">
       {/* Current Level */}
-      <div className="bg-blue-600 dark:bg-blue-700 rounded-lg p-6 shadow-lg">
+      <div className="bg-blue-700 rounded-lg p-6 shadow-lg">
         <div className="text-center">
           <div className="text-sm font-medium text-blue-100 mb-2">
             Level {levelNumber} of {totalLevels}
@@ -36,16 +36,16 @@ export const BlindDisplay = ({
 
       {/* Next Level Preview */}
       {nextLevel && (
-        <div className="bg-gray-200 dark:bg-gray-800 rounded-lg p-4 border-2 border-dashed border-gray-400 dark:border-gray-600">
+        <div className="bg-gray-800 rounded-lg p-4 border-2 border-dashed border-gray-600">
           <div className="text-center">
-            <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+            <div className="text-xs font-medium text-gray-400 mb-1">
               Next Level {nextLevel.level}
             </div>
-            <div className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+            <div className="text-xl font-semibold text-gray-200">
               {nextLevel.smallBlind.toLocaleString()} / {nextLevel.bigBlind.toLocaleString()}
             </div>
             {nextLevel.ante > 0 && (
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <div className="text-sm text-gray-400 mt-1">
                 Ante: {nextLevel.ante.toLocaleString()}
               </div>
             )}
@@ -55,8 +55,8 @@ export const BlindDisplay = ({
 
       {/* End of Tournament */}
       {!nextLevel && (
-        <div className="bg-red-100 dark:bg-red-900/30 rounded-lg p-4 border-2 border-dashed border-red-300 dark:border-red-700">
-          <div className="text-center text-red-800 dark:text-red-300 font-medium">
+        <div className="bg-red-900/30 rounded-lg p-4 border-2 border-dashed border-red-700">
+          <div className="text-center text-red-300 font-medium">
             Final Level
           </div>
         </div>
