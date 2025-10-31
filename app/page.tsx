@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { BlindTimer } from '@/components/BlindTimer'
 import { TournamentSettings } from '@/components/TournamentSettings'
+import { AdPlacement } from '@/components/AdPlacement'
 import type { TournamentConfig } from '@/lib/types'
 import { defaultTournamentConfig } from '@/lib/tournamentConfig'
 import { loadCurrentTournament, saveCurrentTournament } from '@/lib/storage'
@@ -70,20 +71,39 @@ export default function Home() {
               onSave={handleConfigUpdate}
               onClose={() => setShowSettings(false)}
             />
+            {/* Ad inside settings - subtle placement */}
+            <div className="mt-6">
+              <AdPlacement size="rectangle" className="max-w-sm mx-auto" />
+            </div>
           </div>
         )}
 
-        {/* Main Timer Display */}
-        <div className="bg-gray-800 rounded-lg shadow-xl p-6 md:p-8">
-          <BlindTimer config={config} onConfigUpdate={handleConfigUpdate} />
+        {/* Main Content with Optional Sidebar Layout */}
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+          {/* Main Timer Display */}
+          <div className="flex-1 bg-gray-800 rounded-lg shadow-xl p-6 md:p-8">
+            <BlindTimer config={config} onConfigUpdate={handleConfigUpdate} />
+          </div>
+
+          {/* Sidebar Ad - Desktop Only */}
+          <aside className="hidden lg:block lg:w-80 flex-shrink-0">
+            <div className="sticky top-4">
+              <AdPlacement size="sidebar" />
+            </div>
+          </aside>
         </div>
 
-        {/* Footer Info */}
-        <footer className="mt-8 text-center text-sm text-gray-400">
-          <p>
-            Tournament: <span className="font-semibold">{config.name}</span> | Starting Chips:{' '}
-            <span className="font-semibold">{config.startingChips.toLocaleString()}</span>
-          </p>
+        {/* Footer Banner Ad */}
+        <footer className="mt-8 space-y-4">
+          <AdPlacement size="banner" className="max-w-4xl mx-auto" />
+          
+          {/* Footer Info */}
+          <div className="text-center text-sm text-gray-400">
+            <p>
+              Tournament: <span className="font-semibold">{config.name}</span> | Starting Chips:{' '}
+              <span className="font-semibold">{config.startingChips.toLocaleString()}</span>
+            </p>
+          </div>
         </footer>
       </div>
     </main>
