@@ -31,6 +31,17 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
   const [defaultMinutes, setDefaultMinutes] = useState(initialDurationParts.minutes)
   const [defaultSeconds, setDefaultSeconds] = useState(initialDurationParts.seconds)
 
+  // Break configuration state
+  const initialBreakDurationParts = secondsToMinutesAndSeconds(config.breakConfig.duration)
+  const [breakMinutes, setBreakMinutes] = useState(initialBreakDurationParts.minutes)
+  const [breakSeconds, setBreakSeconds] = useState(initialBreakDurationParts.seconds)
+  const [breakEveryNLevels, setBreakEveryNLevels] = useState<number | null>(
+    config.breakConfig.everyNLevels
+  )
+  const [specificLevelsInput, setSpecificLevelsInput] = useState<string>(
+    config.breakConfig.specificLevels.join(', ')
+  )
+
   const handleUpdate = (updates: Partial<TournamentConfig>) => {
     setLocalConfig((prev) => ({ ...prev, ...updates }))
     setErrors([])
@@ -43,6 +54,12 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
       const durationParts = secondsToMinutesAndSeconds(saved.defaultLevelDuration)
       setDefaultMinutes(durationParts.minutes)
       setDefaultSeconds(durationParts.seconds)
+      
+      const breakDurationParts = secondsToMinutesAndSeconds(saved.breakConfig.duration)
+      setBreakMinutes(breakDurationParts.minutes)
+      setBreakSeconds(breakDurationParts.seconds)
+      setBreakEveryNLevels(saved.breakConfig.everyNLevels)
+      setSpecificLevelsInput(saved.breakConfig.specificLevels.join(', '))
     }
     isInitialMount.current = false
   }, [])
@@ -58,6 +75,61 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultMinutes, defaultSeconds])
+
+  // Update break duration when minutes or seconds change
+  useEffect(() => {
+    if (isInitialMount.current) {
+      return
+    }
+    const totalSeconds = minutesAndSecondsToSeconds(breakMinutes, breakSeconds)
+    if (totalSeconds > 0 && totalSeconds !== localConfig.breakConfig.duration) {
+      handleUpdate({
+        breakConfig: {
+          ...localConfig.breakConfig,
+          duration: totalSeconds,
+        },
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [breakMinutes, breakSeconds])
+
+  // Update break every N levels
+  useEffect(() => {
+    if (isInitialMount.current) {
+      return
+    }
+    if (breakEveryNLevels !== localConfig.breakConfig.everyNLevels) {
+      handleUpdate({
+        breakConfig: {
+          ...localConfig.breakConfig,
+          everyNLevels: breakEveryNLevels,
+        },
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [breakEveryNLevels])
+
+  // Update specific levels
+  useEffect(() => {
+    if (isInitialMount.current) {
+      return
+    }
+    const parsedLevels = specificLevelsInput
+      .split(',')
+      .map((s) => parseInt(s.trim()))
+      .filter((n) => !isNaN(n) && n > 0)
+    const currentLevels = localConfig.breakConfig.specificLevels.sort().join(',')
+    const newLevels = parsedLevels.sort().join(',')
+    if (currentLevels !== newLevels) {
+      handleUpdate({
+        breakConfig: {
+          ...localConfig.breakConfig,
+          specificLevels: parsedLevels,
+        },
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [specificLevelsInput])
 
   const handleSave = () => {
     const validation = validateTournamentConfig(localConfig)
@@ -193,6 +265,108 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
             }`}
           />
         </button>
+      </div>
+
+      {/* Break Configuration */}
+      <div className="space-y-6 bg-gray-800/30 p-6 rounded-xl border border-gray-700">
+        <div className="flex items-center justify-between pb-2 border-b border-gray-700">
+          <h3 className="text-lg font-bold text-white">Break Configuration</h3>
+          <button
+            onClick={() =>
+              handleUpdate({
+                breakConfig: {
+                  ...localConfig.breakConfig,
+                  enabled: !localConfig.breakConfig.enabled,
+                },
+              })
+            }
+            onKeyDown={(e) =>
+              handleKeyDown(e, () =>
+                handleUpdate({
+                  breakConfig: {
+                    ...localConfig.breakConfig,
+                    enabled: !localConfig.breakConfig.enabled,
+                  },
+                })
+              )
+            }
+            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
+              localConfig.breakConfig.enabled
+                ? 'bg-purple-500 shadow-lg shadow-purple-500/30'
+                : 'bg-gray-700'
+            }`}
+            aria-label="Toggle break configuration"
+            tabIndex={0}
+          >
+            <span
+              className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-all duration-300 ${
+                localConfig.breakConfig.enabled ? 'translate-x-6' : 'translate-x-1'
+              }`}
+            />
+          </button>
+        </div>
+
+        {localConfig.breakConfig.enabled && (
+          <div className="space-y-5 pt-2">
+            {/* Break Duration */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
+                Break Duration
+              </label>
+              <DurationPicker
+                minutes={breakMinutes}
+                seconds={breakSeconds}
+                onMinutesChange={(mins) => setBreakMinutes(mins)}
+                onSecondsChange={(secs) => setBreakSeconds(secs)}
+                compact={false}
+              />
+              <p className="text-xs text-gray-400 mt-2">
+                Total: <span className="font-semibold text-purple-400">{minutesAndSecondsToSeconds(breakMinutes, breakSeconds)}</span> seconds
+              </p>
+            </div>
+
+            {/* Break Every N Levels */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
+                Break Every N Levels
+              </label>
+              <div className="flex items-center gap-3">
+                <input
+                  type="number"
+                  min="0"
+                  max="20"
+                  value={breakEveryNLevels || ''}
+                  onChange={(e) => {
+                    const val = e.target.value === '' ? null : parseInt(e.target.value)
+                    setBreakEveryNLevels(val === 0 ? null : val)
+                  }}
+                  placeholder="Disabled"
+                  className="w-32 px-4 py-3 bg-gray-800 border-2 border-gray-700 rounded-xl text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-200"
+                />
+                <span className="text-sm text-gray-400">
+                  {breakEveryNLevels ? `Break every ${breakEveryNLevels} level${breakEveryNLevels > 1 ? 's' : ''}` : 'Disabled'}
+                </span>
+              </div>
+            </div>
+
+            {/* Specific Levels */}
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
+                Break at Specific Levels
+              </label>
+              <input
+                type="text"
+                value={specificLevelsInput}
+                onChange={(e) => setSpecificLevelsInput(e.target.value)}
+                placeholder="e.g., 3, 6, 9"
+                className="w-full px-5 py-3 bg-gray-800 border-2 border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-200"
+              />
+              <p className="text-xs text-gray-400">
+                Enter level numbers separated by commas (e.g., 3, 6, 9)
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Blind Structure Templates */}

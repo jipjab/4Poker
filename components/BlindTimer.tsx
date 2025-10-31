@@ -1,10 +1,11 @@
 'use client'
 
 import { useTimer } from '@/lib/useTimer'
-import { formatTime, getCurrentBlindLevel, getNextBlindLevel, getWarningState } from '@/lib/timer'
+import { formatTime, getCurrentBlindLevel, getNextBlindLevel, getWarningState, shouldBreakAtLevel } from '@/lib/timer'
 import type { TournamentConfig } from '@/lib/types'
 import { BlindDisplay } from './BlindDisplay'
 import { TimerControls } from './TimerControls'
+import { BreakTimer } from './BreakTimer'
 
 interface BlindTimerProps {
   config: TournamentConfig
@@ -35,6 +36,20 @@ export const BlindTimer = ({ config, onConfigUpdate }: BlindTimerProps) => {
       </div>
     )
   }
+
+  // Show break timer if break is active
+  if (timer.isBreakActive) {
+    return (
+      <BreakTimer
+        timeRemaining={timer.breakTimeRemaining}
+        totalDuration={config.breakConfig.duration}
+        onEndBreak={timer.endBreak}
+      />
+    )
+  }
+
+  // Check if break is available at current level
+  const breakAvailable = config.breakConfig.enabled && shouldBreakAtLevel(config, timer.currentLevel)
 
   const progressPercentage =
     currentBlind.duration > 0
@@ -82,6 +97,20 @@ export const BlindTimer = ({ config, onConfigUpdate }: BlindTimerProps) => {
         levelNumber={timer.currentLevel + 1}
         totalLevels={config.blindLevels.length}
       />
+
+      {/* Break Option */}
+      {breakAvailable && !timer.isRunning && (
+        <div className="flex justify-center">
+          <button
+            onClick={timer.startBreak}
+            className="px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-xl shadow-purple-500/30 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+            aria-label="Start break timer"
+            tabIndex={0}
+          >
+            Start Break
+          </button>
+        </div>
+      )}
 
       {/* Timer Controls */}
       <TimerControls

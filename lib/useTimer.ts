@@ -2,7 +2,7 @@
 
 import { useReducer, useEffect, useRef, useCallback } from 'react'
 import type { TournamentConfig, TimerState, TimerAction } from './types'
-import { timerReducer, getCurrentBlindLevel } from './timer'
+import { timerReducer, getCurrentBlindLevel, shouldBreakAtLevel } from './timer'
 
 interface UseTimerOptions {
   config: TournamentConfig
@@ -19,10 +19,13 @@ export const useTimer = ({ config, onLevelChange, onTimerEnd }: UseTimerOptions)
     currentLevel: config.currentLevel,
     timeRemaining: initialTime,
     totalElapsed: 0,
+    isBreakActive: false,
+    breakTimeRemaining: 0,
   }
 
   const [state, dispatch] = useReducer(timerReducer, initialState)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const breakIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const previousLevelRef = useRef(state.currentLevel)
 
   // Update time remaining when level changes and timer is not running
@@ -45,7 +48,7 @@ export const useTimer = ({ config, onLevelChange, onTimerEnd }: UseTimerOptions)
 
   // Timer tick effect
   useEffect(() => {
-    if (state.isRunning && !state.isPaused) {
+    if (state.isRunning && !state.isPaused && !state.isBreakActive) {
       intervalRef.current = setInterval(() => {
         dispatch({ type: 'TICK' })
       }, 1000)
@@ -61,17 +64,51 @@ export const useTimer = ({ config, onLevelChange, onTimerEnd }: UseTimerOptions)
         clearInterval(intervalRef.current)
       }
     }
-  }, [state.isRunning, state.isPaused])
+  }, [state.isRunning, state.isPaused, state.isBreakActive])
+
+  // Break timer tick effect
+  useEffect(() => {
+    if (state.isBreakActive && state.breakTimeRemaining > 0) {
+      breakIntervalRef.current = setInterval(() => {
+        dispatch({ type: 'BREAK_TICK' })
+      }, 1000)
+    } else {
+      if (breakIntervalRef.current) {
+        clearInterval(breakIntervalRef.current)
+        breakIntervalRef.current = null
+      }
+    }
+
+    return () => {
+      if (breakIntervalRef.current) {
+        clearInterval(breakIntervalRef.current)
+      }
+    }
+  }, [state.isBreakActive, state.breakTimeRemaining])
+
+  // Handle break timer reaching zero
+  useEffect(() => {
+    if (state.isBreakActive && state.breakTimeRemaining === 0) {
+      // Break ended automatically
+      dispatch({ type: 'END_BREAK' })
+    }
+  }, [state.isBreakActive, state.breakTimeRemaining])
 
   // Handle timer reaching zero
   useEffect(() => {
-    if (state.timeRemaining === 0 && state.isRunning && !state.isPaused) {
+    if (state.timeRemaining === 0 && state.isRunning && !state.isPaused && !state.isBreakActive) {
       const nextLevel = state.currentLevel + 1
       if (nextLevel < config.blindLevels.length) {
         const nextBlind = getCurrentBlindLevel(config, nextLevel)
         if (nextBlind) {
           dispatch({ type: 'NEXT_LEVEL' })
           dispatch({ type: 'SET_LEVEL', level: nextLevel, duration: nextBlind.duration })
+          
+          // Check if break is needed at next level (after advancing)
+          // Note: We pause here if break is needed, user can manually start break
+          if (shouldBreakAtLevel(config, nextLevel)) {
+            dispatch({ type: 'PAUSE' })
+          }
         }
       } else {
         // Tournament ended
@@ -79,7 +116,7 @@ export const useTimer = ({ config, onLevelChange, onTimerEnd }: UseTimerOptions)
         onTimerEnd?.()
       }
     }
-  }, [state.timeRemaining, state.isRunning, state.isPaused, state.currentLevel, config, onTimerEnd])
+  }, [state.timeRemaining, state.isRunning, state.isPaused, state.isBreakActive, state.currentLevel, config, onTimerEnd])
 
   const start = useCallback(() => {
     // Set initial time if needed
@@ -138,6 +175,18 @@ export const useTimer = ({ config, onLevelChange, onTimerEnd }: UseTimerOptions)
     }
   }, [config])
 
+  const startBreak = useCallback(() => {
+    if (config.breakConfig.enabled && !state.isBreakActive) {
+      dispatch({ type: 'START_BREAK', duration: config.breakConfig.duration })
+    }
+  }, [config.breakConfig, state.isBreakActive])
+
+  const endBreak = useCallback(() => {
+    if (state.isBreakActive) {
+      dispatch({ type: 'END_BREAK' })
+    }
+  }, [state.isBreakActive])
+
   return {
     ...state,
     start,
@@ -147,6 +196,8 @@ export const useTimer = ({ config, onLevelChange, onTimerEnd }: UseTimerOptions)
     nextLevel,
     previousLevel,
     setLevel,
+    startBreak,
+    endBreak,
   }
 }
 

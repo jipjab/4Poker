@@ -11,6 +11,12 @@ export const defaultTournamentConfig: TournamentConfig = {
   defaultLevelDuration: 600, // 10 minutes
   soundAlertsEnabled: true,
   currentLevel: 0,
+  breakConfig: {
+    enabled: false,
+    duration: 300, // 5 minutes default
+    everyNLevels: 3, // Every 3 levels
+    specificLevels: [], // No specific levels by default
+  },
 }
 
 /**

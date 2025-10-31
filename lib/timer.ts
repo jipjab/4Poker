@@ -36,6 +36,8 @@ export const timerReducer = (
         currentLevel: state.currentLevel,
         timeRemaining: state.timeRemaining,
         totalElapsed: 0,
+        isBreakActive: false,
+        breakTimeRemaining: 0,
       }
     
     case 'TICK':
@@ -61,6 +63,31 @@ export const timerReducer = (
         ...state,
         currentLevel: action.level,
         timeRemaining: action.duration ?? state.timeRemaining,
+      }
+    
+    case 'START_BREAK':
+      return {
+        ...state,
+        isBreakActive: true,
+        breakTimeRemaining: action.duration,
+        isRunning: false,
+        isPaused: true,
+      }
+    
+    case 'BREAK_TICK':
+      if (state.breakTimeRemaining > 0) {
+        return {
+          ...state,
+          breakTimeRemaining: state.breakTimeRemaining - 1,
+        }
+      }
+      return state
+    
+    case 'END_BREAK':
+      return {
+        ...state,
+        isBreakActive: false,
+        breakTimeRemaining: 0,
       }
     
     default:
@@ -110,5 +137,35 @@ export const getWarningState = (timeRemaining: number): 'normal' | 'warning' | '
     return 'warning'
   }
   return 'critical'
+}
+
+/**
+ * Check if a break should occur at the given level
+ */
+export const shouldBreakAtLevel = (
+  config: TournamentConfig,
+  level: number
+): boolean => {
+  if (!config.breakConfig.enabled) {
+    return false
+  }
+
+  const breakConfig = config.breakConfig
+
+  // Check specific levels (level is 0-indexed in code, but specificLevels are 1-indexed from user input)
+  // So if user says level 3, we check if current level index is 2 (0-indexed)
+  const displayLevel = level + 1 // Convert to 1-indexed for comparison
+  if (breakConfig.specificLevels.includes(displayLevel)) {
+    return true
+  }
+
+  // Check every N levels (level is 0-indexed, so level 0 = level 1 in display)
+  if (breakConfig.everyNLevels !== null && breakConfig.everyNLevels > 0) {
+    if (displayLevel > 0 && displayLevel % breakConfig.everyNLevels === 0) {
+      return true
+    }
+  }
+
+  return false
 }
 

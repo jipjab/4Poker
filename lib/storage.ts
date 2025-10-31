@@ -1,7 +1,21 @@
 import type { TournamentConfig } from './types'
+import { defaultTournamentConfig } from './tournamentConfig'
 
 const STORAGE_KEY = 'pokertimer_configs'
 const CURRENT_TOURNAMENT_KEY = 'pokertimer_current'
+
+/**
+ * Migrate old configs to include breakConfig if missing
+ */
+const migrateConfig = (config: any): TournamentConfig => {
+  if (!config.breakConfig) {
+    return {
+      ...config,
+      breakConfig: defaultTournamentConfig.breakConfig,
+    }
+  }
+  return config as TournamentConfig
+}
 
 /**
  * Save tournament configuration to localStorage
@@ -33,7 +47,8 @@ export const getAllTournamentConfigs = (): TournamentConfig[] => {
   
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    return stored ? JSON.parse(stored) : []
+    const configs = stored ? JSON.parse(stored) : []
+    return configs.map(migrateConfig)
   } catch (error) {
     console.error('Failed to load tournament configs:', error)
     return []
@@ -84,7 +99,9 @@ export const loadCurrentTournament = (): TournamentConfig | null => {
   
   try {
     const stored = localStorage.getItem(CURRENT_TOURNAMENT_KEY)
-    return stored ? JSON.parse(stored) : null
+    if (!stored) return null
+    const config = JSON.parse(stored)
+    return migrateConfig(config)
   } catch (error) {
     console.error('Failed to load current tournament:', error)
     return null

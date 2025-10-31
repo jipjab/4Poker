@@ -10,6 +10,13 @@ export interface BlindLevel {
   duration: number // in seconds
 }
 
+export interface BreakConfig {
+  enabled: boolean
+  duration: number // in seconds
+  everyNLevels: number | null // Break every N levels (e.g., every 3 levels)
+  specificLevels: number[] // Break at specific level numbers (e.g., [3, 6, 9])
+}
+
 export interface TournamentConfig {
   name: string
   description?: string
@@ -18,6 +25,7 @@ export interface TournamentConfig {
   defaultLevelDuration: number // in seconds
   soundAlertsEnabled: boolean
   currentLevel: number
+  breakConfig: BreakConfig
 }
 
 export interface TimerState {
@@ -26,6 +34,8 @@ export interface TimerState {
   currentLevel: number
   timeRemaining: number // in seconds
   totalElapsed: number // in seconds
+  isBreakActive: boolean
+  breakTimeRemaining: number // in seconds
 }
 
 export type TimerAction = 
@@ -34,6 +44,9 @@ export type TimerAction =
   | { type: 'RESUME' }
   | { type: 'RESET' }
   | { type: 'TICK' }
+  | { type: 'BREAK_TICK' }
   | { type: 'NEXT_LEVEL' }
   | { type: 'SET_LEVEL'; level: number; duration?: number }
+  | { type: 'START_BREAK'; duration: number }
+  | { type: 'END_BREAK' }
 
