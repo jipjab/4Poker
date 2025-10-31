@@ -52,7 +52,7 @@ export const timerReducer = (
       return {
         ...state,
         currentLevel: state.currentLevel + 1,
-        timeRemaining: 0, // Will be set by parent component
+        timeRemaining: state.timeRemaining, // Will be set by parent component via SET_LEVEL
         totalElapsed: 0,
       }
     
@@ -60,7 +60,7 @@ export const timerReducer = (
       return {
         ...state,
         currentLevel: action.level,
-        timeRemaining: 0, // Will be set by parent component
+        timeRemaining: action.duration ?? state.timeRemaining,
       }
     
     default:

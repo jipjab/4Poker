@@ -35,5 +35,5 @@ export type TimerAction =
   | { type: 'RESET' }
   | { type: 'TICK' }
   | { type: 'NEXT_LEVEL' }
-  | { type: 'SET_LEVEL'; level: number }
+  | { type: 'SET_LEVEL'; level: number; duration?: number }
 
