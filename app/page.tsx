@@ -118,6 +118,18 @@ export default function Home() {
           </div>
         </header>
 
+        {/* Introduction */}
+        <div className="mb-6 sm:mb-8 bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gray-700">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
+              <span className="font-semibold text-white">PokerTimer</span> is a free, professional poker tournament timer that helps you manage blind levels and tournament timing effortlessly. 
+              Set up your custom blind structure, configure automatic level progression, and schedule breaks - all in one place. 
+              The timer automatically advances through levels, displays current and upcoming blinds, and provides visual and audio warnings as levels approach. 
+              Perfect for home games, tournaments, and poker clubs. Simply configure your tournament settings, start the timer, and let it run your tournament smoothly.
+            </p>
+          </div>
+        </div>
+
         {/* Settings Panel */}
         {showSettings && (
           <div className="mb-8">
