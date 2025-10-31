@@ -18,7 +18,7 @@ export default function HandRankingsPage() {
               tabIndex={0}
             >
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
-                PokerTimer
+                AllInTimer
               </h1>
               <p className="text-xs sm:text-sm md:text-base text-gray-400 mt-1">
                 Free Poker Tournament Timer
@@ -293,7 +293,7 @@ export default function HandRankingsPage() {
           <div className="text-center space-y-3 pb-6">
             <div className="pt-4 border-t border-gray-800">
               <p className="text-xs sm:text-sm text-gray-500">
-                © {new Date().getFullYear()} PokerTimer. All rights reserved.
+                © {new Date().getFullYear()} AllInTimer. All rights reserved.
               </p>
               <p className="text-xs text-gray-600 mt-2">
                 Free poker tournament timer for home games, tournaments, and poker clubs.

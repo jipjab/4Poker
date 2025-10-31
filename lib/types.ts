@@ -1,5 +1,5 @@
 /**
- * Type definitions for PokerTimer application
+ * Type definitions for AllInTimer application
  */
 
 export interface BlindLevel {

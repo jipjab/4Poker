@@ -95,7 +95,7 @@ export default function Home() {
             tabIndex={0}
           >
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
-              PokerTimer
+              AllInTimer
             </h1>
             <p className="text-xs sm:text-sm md:text-base text-gray-400 mt-1">
               Free Poker Tournament Timer
@@ -140,11 +140,11 @@ export default function Home() {
           <div className="relative max-w-3xl mx-auto">
             <div className="text-center mb-4">
               <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 mb-3">
-                Welcome to PokerTimer
+                    Welcome to AllInTimer
               </h2>
             </div>
             <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
-              <span className="font-semibold text-white">PokerTimer</span> is a free, professional poker tournament timer that helps you manage blind levels and tournament timing effortlessly.{' '}
+                    <span className="font-semibold text-white">AllInTimer</span> is a free, professional poker tournament timer that helps you manage blind levels and tournament timing effortlessly.{' '}
               Set up your custom blind structure, configure automatic level progression, and schedule breaks—all in one place.{' '}
               The timer automatically advances through levels, displays current and upcoming blinds, and provides visual and audio warnings as levels approach.{' '}
               <span className="text-gray-400 italic">Perfect for home games, tournaments, and poker clubs.</span> Simply configure your tournament settings, start the timer, and let it run your tournament smoothly.
@@ -202,7 +202,7 @@ export default function Home() {
             {/* Copyright */}
             <div className="pt-4 border-t border-gray-800">
               <p className="text-xs sm:text-sm text-gray-500">
-                © {new Date().getFullYear()} PokerTimer. All rights reserved.
+                © {new Date().getFullYear()} AllInTimer. All rights reserved.
               </p>
               <p className="text-xs text-gray-600 mt-2">
                 Free poker tournament timer for home games, tournaments, and poker clubs.
