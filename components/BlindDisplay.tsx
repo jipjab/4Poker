@@ -16,18 +16,18 @@ export const BlindDisplay = ({
   totalLevels,
 }: BlindDisplayProps) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Current Level */}
-      <div className="bg-blue-700 rounded-lg p-6 shadow-lg">
+      <div className="bg-blue-700 rounded-lg p-4 sm:p-6 shadow-lg">
         <div className="text-center">
-          <div className="text-sm font-medium text-blue-100 mb-2">
+          <div className="text-xs sm:text-sm font-medium text-blue-100 mb-2">
             Level {levelNumber} of {totalLevels}
           </div>
-          <div className="text-3xl md:text-4xl font-bold text-white mb-3">
+          <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 sm:mb-3">
             {currentLevel.smallBlind.toLocaleString()} / {currentLevel.bigBlind.toLocaleString()}
           </div>
           {currentLevel.ante > 0 && (
-            <div className="text-lg text-blue-100">
+            <div className="text-base sm:text-lg text-blue-100">
               Ante: {currentLevel.ante.toLocaleString()}
             </div>
           )}

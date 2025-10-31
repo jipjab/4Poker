@@ -83,10 +83,10 @@ export default function Home() {
   // when in fullscreen mode - we don't need a separate timer instance here
 
   return (
-    <main className="min-h-screen p-4 md:p-8 bg-background">
+    <main className="min-h-screen p-3 sm:p-4 md:p-8 bg-background">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
           <Link
             href="/"
             onClick={() => setShowSettings(false)}
@@ -94,21 +94,22 @@ export default function Home() {
             aria-label="Go to home page"
             tabIndex={0}
           >
-            <h1 className="text-3xl md:text-4xl font-bold text-white">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
               PokerTimer
             </h1>
-            <p className="text-sm md:text-base text-gray-400 mt-1">
+            <p className="text-xs sm:text-sm md:text-base text-gray-400 mt-1">
               Free Poker Tournament Timer
             </p>
           </Link>
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-2 sm:gap-3 items-center w-full sm:w-auto">
             <FullScreenToggle
               onToggle={(fullScreen) => setIsFullScreen(fullScreen)}
+              className="flex-1 sm:flex-initial"
             />
             <button
               onClick={() => setShowSettings(!showSettings)}
               onKeyDown={(e) => handleKeyDown(e, () => setShowSettings(!showSettings))}
-              className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
+              className="px-4 py-3 sm:px-4 sm:py-2 bg-gray-500 hover:bg-gray-600 active:bg-gray-700 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 text-sm sm:text-base min-h-[44px] sm:min-h-0 flex items-center justify-center"
               aria-label={showSettings ? 'Hide settings' : 'Show settings'}
               tabIndex={0}
             >
@@ -135,7 +136,7 @@ export default function Home() {
         {/* Main Content with Optional Sidebar Layout */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Main Timer Display */}
-          <div className="flex-1 bg-gray-800 rounded-lg shadow-xl p-6 md:p-8">
+          <div className="flex-1 bg-gray-800 rounded-lg shadow-xl p-4 sm:p-6 md:p-8">
             <BlindTimer 
               config={config} 
               onConfigUpdate={handleConfigUpdate}

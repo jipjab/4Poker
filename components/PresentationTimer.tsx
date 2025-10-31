@@ -118,7 +118,7 @@ export const PresentationTimer = ({
       </div>
 
       {/* Blind Levels */}
-      <div className="grid grid-cols-2 gap-8 md:gap-16 mb-8 w-full max-w-4xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 md:gap-16 mb-8 w-full max-w-4xl">
         <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 md:p-8 border-2 border-gray-700">
           <div className="text-center">
             <div className="text-xl md:text-2xl text-gray-400 mb-4 font-semibold uppercase tracking-wide">

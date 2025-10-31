@@ -93,7 +93,7 @@ export const FullScreenToggle = ({ onToggle, className = '' }: FullScreenToggleP
     <button
       onClick={toggleFullscreen}
       onKeyDown={(e) => handleKeyDown(e, toggleFullscreen)}
-      className={`px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 ${className}`}
+      className={`px-4 py-3 sm:py-2 min-h-[48px] sm:min-h-[44px] bg-gray-700 active:bg-gray-600 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 text-sm sm:text-base flex items-center justify-center ${className}`}
       aria-label={isFullScreen ? 'Exit fullscreen' : 'Enter fullscreen'}
       title={isFullScreen ? 'Exit Fullscreen (Esc)' : 'Enter Fullscreen (F11)'}
       tabIndex={0}

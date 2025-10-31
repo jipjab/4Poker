@@ -34,7 +34,7 @@ export const LevelJump = ({ currentLevel, totalLevels, onJump }: LevelJumpProps)
       <button
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={(e) => handleKeyDown(e, () => setIsOpen(!isOpen))}
-        className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-lg shadow-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+        className="w-full sm:w-auto px-4 py-3 sm:py-2 min-h-[48px] sm:min-h-[44px] bg-gradient-to-r from-indigo-600 to-purple-600 active:from-indigo-700 active:to-purple-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-900 text-sm sm:text-base"
         aria-label="Jump to level"
         aria-expanded={isOpen}
         tabIndex={0}
@@ -52,7 +52,7 @@ export const LevelJump = ({ currentLevel, totalLevels, onJump }: LevelJumpProps)
           />
           
           {/* Dropdown Menu */}
-          <div className="absolute right-0 mt-2 w-64 bg-gray-800 border-2 border-gray-700 rounded-xl shadow-2xl z-20 p-4">
+          <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-64 max-w-sm bg-gray-800 border-2 border-gray-700 rounded-xl shadow-2xl z-20 p-4">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-semibold text-gray-300 uppercase tracking-wide">

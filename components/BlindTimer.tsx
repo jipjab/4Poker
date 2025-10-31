@@ -161,14 +161,14 @@ export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: Bli
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-8">
+    <div className="w-full max-w-4xl mx-auto space-y-6 sm:space-y-8">
       {/* Timer Display */}
       <div className="text-center">
-        <div className={`text-6xl md:text-8xl font-bold font-mono mb-4 transition-colors duration-300 ${timerTextColor}`}>
+        <div className={`text-5xl sm:text-6xl md:text-8xl font-bold font-mono mb-3 sm:mb-4 transition-colors duration-300 ${timerTextColor}`}>
           {formatTime(timer.timeRemaining)}
         </div>
-        <div className="flex items-center justify-center gap-3">
-          <div className="text-lg text-gray-400">
+        <div className="flex items-center justify-center gap-2 sm:gap-3">
+          <div className="text-base sm:text-lg text-gray-400">
             {timer.isRunning && !timer.isPaused ? 'Running' : timer.isPaused ? 'Paused' : 'Ready'}
           </div>
           {/* Mute Button */}
@@ -176,10 +176,10 @@ export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: Bli
             <button
               onClick={() => setIsMuted(!isMuted)}
               onKeyDown={(e) => handleKeyDown(e, () => setIsMuted(!isMuted))}
-              className={`p-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 ${
+              className={`p-3 sm:p-2 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-95 ${
                 isMuted
-                  ? 'bg-red-900/30 text-red-400 hover:bg-red-900/50'
-                  : 'bg-gray-700/50 text-gray-400 hover:bg-gray-700 hover:text-white'
+                  ? 'bg-red-900/30 text-red-400 active:bg-red-900/50'
+                  : 'bg-gray-700/50 text-gray-400 active:bg-gray-700 active:text-white'
               }`}
               aria-label={isMuted ? 'Unmute sound alerts' : 'Mute sound alerts'}
               tabIndex={0}
@@ -228,7 +228,7 @@ export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: Bli
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full bg-gray-700 rounded-full h-4 overflow-hidden">
+      <div className="w-full bg-gray-700 rounded-full h-3 sm:h-4 overflow-hidden">
         <div
           className={`h-full ${progressBarGradient} transition-all duration-1000 ease-linear`}
           style={{ width: `${Math.min(progressPercentage, 100)}%` }}
@@ -248,7 +248,7 @@ export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: Bli
         <div className="flex justify-center">
           <button
             onClick={timer.startBreak}
-            className="px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-xl shadow-purple-500/30 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+            className="px-6 sm:px-8 py-3 sm:py-4 min-h-[48px] sm:min-h-[44px] bg-gradient-to-r from-purple-600 to-indigo-600 active:from-purple-700 active:to-indigo-700 text-white font-bold rounded-xl shadow-xl shadow-purple-500/30 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 text-base sm:text-lg"
             aria-label="Start break timer"
             tabIndex={0}
           >
