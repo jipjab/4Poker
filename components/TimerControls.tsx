@@ -1,5 +1,7 @@
 'use client'
 
+import { LevelJump } from './LevelJump'
+
 interface TimerControlsProps {
   isRunning: boolean
   isPaused: boolean
@@ -11,6 +13,9 @@ interface TimerControlsProps {
   onPreviousLevel?: () => void
   canGoNext?: boolean
   canGoPrevious?: boolean
+  onJumpToLevel?: (level: number) => void
+  currentLevel?: number
+  totalLevels?: number
 }
 
 export const TimerControls = ({
@@ -24,6 +29,9 @@ export const TimerControls = ({
   onPreviousLevel,
   canGoNext = false,
   canGoPrevious = false,
+  onJumpToLevel,
+  currentLevel,
+  totalLevels,
 }: TimerControlsProps) => {
   const handleKeyDown = (event: React.KeyboardEvent, action: () => void) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -102,6 +110,14 @@ export const TimerControls = ({
         >
           Next →
         </button>
+      )}
+
+      {onJumpToLevel && currentLevel !== undefined && totalLevels !== undefined && (
+        <LevelJump
+          currentLevel={currentLevel}
+          totalLevels={totalLevels}
+          onJump={onJumpToLevel}
+        />
       )}
     </div>
   )

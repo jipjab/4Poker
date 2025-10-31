@@ -26,6 +26,13 @@ export const BlindTimer = ({ config, onConfigUpdate }: BlindTimerProps) => {
     },
   })
 
+  const handleJumpToLevel = (level: number) => {
+    timer.setLevel(level)
+    if (onConfigUpdate) {
+      onConfigUpdate({ ...config, currentLevel: level })
+    }
+  }
+
   const currentBlind = getCurrentBlindLevel(config, timer.currentLevel)
   const nextBlind = getNextBlindLevel(config, timer.currentLevel)
 
@@ -124,6 +131,9 @@ export const BlindTimer = ({ config, onConfigUpdate }: BlindTimerProps) => {
         onPreviousLevel={timer.previousLevel}
         canGoNext={timer.currentLevel < config.blindLevels.length - 1}
         canGoPrevious={timer.currentLevel > 0}
+        onJumpToLevel={handleJumpToLevel}
+        currentLevel={timer.currentLevel}
+        totalLevels={config.blindLevels.length}
       />
 
       {/* Level Progress Indicator */}

@@ -167,13 +167,19 @@ export const useTimer = ({ config, onLevelChange, onTimerEnd }: UseTimerOptions)
   }, [state.currentLevel, config])
 
   const setLevel = useCallback((level: number) => {
-    if (level >= 0 && level < config.blindLevels.length) {
+    if (level >= 0 && level < config.blindLevels.length && level !== state.currentLevel) {
       const levelBlind = getCurrentBlindLevel(config, level)
       if (levelBlind) {
+        // Pause timer when jumping to a level
+        if (state.isRunning && !state.isPaused) {
+          dispatch({ type: 'PAUSE' })
+        }
+        // Reset elapsed time and set new level
+        dispatch({ type: 'RESET' })
         dispatch({ type: 'SET_LEVEL', level, duration: levelBlind.duration })
       }
     }
-  }, [config])
+  }, [config, state.isRunning, state.isPaused, state.currentLevel])
 
   const startBreak = useCallback(() => {
     if (config.breakConfig.enabled && !state.isBreakActive) {
