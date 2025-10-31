@@ -1,7 +1,7 @@
 'use client'
 
 import { useTimer } from '@/lib/useTimer'
-import { formatTime, getCurrentBlindLevel, getNextBlindLevel } from '@/lib/timer'
+import { formatTime, getCurrentBlindLevel, getNextBlindLevel, getWarningState } from '@/lib/timer'
 import type { TournamentConfig } from '@/lib/types'
 import { BlindDisplay } from './BlindDisplay'
 import { TimerControls } from './TimerControls'
@@ -30,7 +30,7 @@ export const BlindTimer = ({ config, onConfigUpdate }: BlindTimerProps) => {
 
   if (!currentBlind) {
     return (
-      <div className="text-center text-red-600 dark:text-red-400">
+      <div className="text-center text-red-400">
         <p>No blind levels configured. Please set up your tournament.</p>
       </div>
     )
@@ -41,22 +41,36 @@ export const BlindTimer = ({ config, onConfigUpdate }: BlindTimerProps) => {
       ? ((currentBlind.duration - timer.timeRemaining) / currentBlind.duration) * 100
       : 0
 
+  const warningState = getWarningState(timer.timeRemaining)
+  
+  // Determine timer text color based on warning state
+  const timerTextColor = 
+    warningState === 'critical' ? 'text-red-500' :
+    warningState === 'warning' ? 'text-yellow-400' :
+    'text-white'
+  
+  // Determine progress bar gradient based on warning state
+  const progressBarGradient =
+    warningState === 'critical' ? 'bg-gradient-to-r from-red-500 to-red-600' :
+    warningState === 'warning' ? 'bg-gradient-to-r from-yellow-500 to-yellow-600' :
+    'bg-gradient-to-r from-blue-500 to-green-500'
+
   return (
     <div className="w-full max-w-4xl mx-auto space-y-8">
       {/* Timer Display */}
       <div className="text-center">
-        <div className="text-6xl md:text-8xl font-bold font-mono text-gray-900 dark:text-white mb-4">
+        <div className={`text-6xl md:text-8xl font-bold font-mono mb-4 transition-colors duration-300 ${timerTextColor}`}>
           {formatTime(timer.timeRemaining)}
         </div>
-        <div className="text-lg text-gray-600 dark:text-gray-400">
+        <div className="text-lg text-gray-400">
           {timer.isRunning && !timer.isPaused ? 'Running' : timer.isPaused ? 'Paused' : 'Ready'}
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
+      <div className="w-full bg-gray-700 rounded-full h-4 overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-blue-500 to-green-500 transition-all duration-1000 ease-linear"
+          className={`h-full ${progressBarGradient} transition-all duration-1000 ease-linear`}
           style={{ width: `${Math.min(progressPercentage, 100)}%` }}
         />
       </div>
@@ -84,7 +98,7 @@ export const BlindTimer = ({ config, onConfigUpdate }: BlindTimerProps) => {
       />
 
       {/* Level Progress Indicator */}
-      <div className="text-center text-sm text-gray-500 dark:text-gray-400">
+      <div className="text-center text-sm text-gray-400">
         Total Time: {formatTime(timer.totalElapsed)}
       </div>
     </div>

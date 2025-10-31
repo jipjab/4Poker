@@ -98,3 +98,17 @@ export const formatTime = (seconds: number): string => {
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
 }
 
+/**
+ * Get warning state based on time remaining
+ * Returns 'normal' when > 30s, 'warning' when <= 30s and > 10s, 'critical' when <= 10s
+ */
+export const getWarningState = (timeRemaining: number): 'normal' | 'warning' | 'critical' => {
+  if (timeRemaining > 30) {
+    return 'normal'
+  }
+  if (timeRemaining > 10) {
+    return 'warning'
+  }
+  return 'critical'
+}
+
