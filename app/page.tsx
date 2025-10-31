@@ -119,13 +119,19 @@ export default function Home() {
         </header>
 
         {/* Introduction */}
-        <div className="mb-6 sm:mb-8 bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gray-700">
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
-              <span className="font-semibold text-white">PokerTimer</span> is a free, professional poker tournament timer that helps you manage blind levels and tournament timing effortlessly. 
-              Set up your custom blind structure, configure automatic level progression, and schedule breaks - all in one place. 
-              The timer automatically advances through levels, displays current and upcoming blinds, and provides visual and audio warnings as levels approach. 
-              Perfect for home games, tournaments, and poker clubs. Simply configure your tournament settings, start the timer, and let it run your tournament smoothly.
+        <div className="mb-6 sm:mb-8 relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800 via-gray-800/95 to-gray-900 p-6 sm:p-8 border border-gray-700/50 shadow-xl">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-transparent to-purple-600/5 pointer-events-none"></div>
+          <div className="relative max-w-3xl mx-auto">
+            <div className="text-center mb-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 mb-3">
+                Welcome to PokerTimer
+              </h2>
+            </div>
+            <p className="text-sm sm:text-base text-gray-300 leading-relaxed space-y-2">
+              <span className="font-semibold text-white">PokerTimer</span> is a free, professional poker tournament timer that helps you manage blind levels and tournament timing effortlessly.{' '}
+              Set up your custom blind structure, configure automatic level progression, and schedule breaks—all in one place.{' '}
+              The timer automatically advances through levels, displays current and upcoming blinds, and provides visual and audio warnings as levels approach.{' '}
+              <span className="text-gray-400 italic">Perfect for home games, tournaments, and poker clubs.</span> Simply configure your tournament settings, start the timer, and let it run your tournament smoothly.
             </p>
           </div>
         </div>
