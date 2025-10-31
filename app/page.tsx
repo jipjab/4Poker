@@ -175,11 +175,23 @@ export default function Home() {
           <AdPlacement size="banner" className="max-w-4xl mx-auto" />
           
           {/* Footer Info */}
-          <div className="text-center text-sm text-gray-400">
-            <p>
-              Tournament: <span className="font-semibold">{config.name}</span> | Starting Chips:{' '}
-              <span className="font-semibold">{config.startingChips.toLocaleString()}</span>
-            </p>
+          <div className="text-center space-y-3 pb-6">
+            <div className="text-sm text-gray-400">
+              <p>
+                Tournament: <span className="font-semibold text-gray-300">{config.name}</span> | Starting Chips:{' '}
+                <span className="font-semibold text-gray-300">{config.startingChips.toLocaleString()}</span>
+              </p>
+            </div>
+            
+            {/* Copyright */}
+            <div className="pt-4 border-t border-gray-800">
+              <p className="text-xs sm:text-sm text-gray-500">
+                © {new Date().getFullYear()} PokerTimer. All rights reserved.
+              </p>
+              <p className="text-xs text-gray-600 mt-1">
+                Free poker tournament timer for home games, tournaments, and poker clubs.
+              </p>
+            </div>
           </div>
         </footer>
       </div>
