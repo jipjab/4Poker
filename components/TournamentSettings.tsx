@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { TournamentConfig } from '@/lib/types'
 import { BlindLevelsEditor } from './BlindLevelsEditor'
+import { DurationPicker } from './DurationPicker'
+import { secondsToMinutesAndSeconds, minutesAndSecondsToSeconds } from '@/lib/timeHelpers'
 import {
   defaultTournamentConfig,
   createDefaultBlindStructure,
@@ -22,18 +24,40 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
   const [localConfig, setLocalConfig] = useState<TournamentConfig>(config)
   const [errors, setErrors] = useState<string[]>([])
   const [showSavedConfigs, setShowSavedConfigs] = useState(false)
-
-  useEffect(() => {
-    const saved = loadCurrentTournament()
-    if (saved) {
-      setLocalConfig(saved)
-    }
-  }, [])
+  const isInitialMount = useRef(true)
+  
+  // Convert default duration to minutes and seconds
+  const initialDurationParts = secondsToMinutesAndSeconds(config.defaultLevelDuration)
+  const [defaultMinutes, setDefaultMinutes] = useState(initialDurationParts.minutes)
+  const [defaultSeconds, setDefaultSeconds] = useState(initialDurationParts.seconds)
 
   const handleUpdate = (updates: Partial<TournamentConfig>) => {
     setLocalConfig((prev) => ({ ...prev, ...updates }))
     setErrors([])
   }
+
+  useEffect(() => {
+    const saved = loadCurrentTournament()
+    if (saved) {
+      setLocalConfig(saved)
+      const durationParts = secondsToMinutesAndSeconds(saved.defaultLevelDuration)
+      setDefaultMinutes(durationParts.minutes)
+      setDefaultSeconds(durationParts.seconds)
+    }
+    isInitialMount.current = false
+  }, [])
+
+  // Update duration when minutes or seconds change (skip on initial mount)
+  useEffect(() => {
+    if (isInitialMount.current) {
+      return
+    }
+    const totalSeconds = minutesAndSecondsToSeconds(defaultMinutes, defaultSeconds)
+    if (totalSeconds > 0 && totalSeconds !== localConfig.defaultLevelDuration) {
+      handleUpdate({ defaultLevelDuration: totalSeconds })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultMinutes, defaultSeconds])
 
   const handleSave = () => {
     const validation = validateTournamentConfig(localConfig)
@@ -73,50 +97,50 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
   const savedConfigs = getAllTournamentConfigs()
 
   return (
-    <div className="space-y-6 bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Tournament Settings</h2>
+    <div className="space-y-8 bg-gray-900 p-8 rounded-2xl shadow-2xl border border-gray-800">
+      <div className="flex justify-between items-center pb-4 border-b border-gray-800">
+        <h2 className="text-3xl font-bold text-white">Tournament Settings</h2>
         {onClose && (
           <button
             onClick={onClose}
             onKeyDown={(e) => handleKeyDown(e, onClose)}
-            className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-all duration-200"
             aria-label="Close settings"
             tabIndex={0}
           >
-            ×
+            <span className="text-2xl">×</span>
           </button>
         )}
       </div>
 
       {/* Error Display */}
       {errors.length > 0 && (
-        <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 rounded-lg p-4">
-          <ul className="list-disc list-inside text-red-800 dark:text-red-300 space-y-1">
+        <div className="bg-red-900/30 border-2 border-red-700/50 rounded-xl p-5 backdrop-blur-sm">
+          <ul className="list-disc list-inside text-red-300 space-y-2 text-sm">
             {errors.map((error, index) => (
-              <li key={index}>{error}</li>
+              <li key={index} className="font-medium">{error}</li>
             ))}
           </ul>
         </div>
       )}
 
       {/* Tournament Name */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+      <div className="space-y-2">
+        <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
           Tournament Name
         </label>
         <input
           type="text"
           value={localConfig.name}
           onChange={(e) => handleUpdate({ name: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-5 py-3 bg-gray-800 border-2 border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
           placeholder="Enter tournament name"
         />
       </div>
 
       {/* Starting Chips */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+      <div className="space-y-2">
+        <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
           Starting Chips
         </label>
         <input
@@ -124,29 +148,30 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
           min="1"
           value={localConfig.startingChips}
           onChange={(e) => handleUpdate({ startingChips: parseInt(e.target.value) || 1000 })}
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-5 py-3 bg-gray-800 border-2 border-gray-700 rounded-xl text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
         />
       </div>
 
       {/* Default Level Duration */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Default Level Duration (seconds)
+      <div className="space-y-2">
+        <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
+          Default Level Duration
         </label>
-        <input
-          type="number"
-          min="1"
-          value={localConfig.defaultLevelDuration}
-          onChange={(e) =>
-            handleUpdate({ defaultLevelDuration: parseInt(e.target.value) || 600 })
-          }
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+        <DurationPicker
+          minutes={defaultMinutes}
+          seconds={defaultSeconds}
+          onMinutesChange={(mins) => setDefaultMinutes(mins)}
+          onSecondsChange={(secs) => setDefaultSeconds(secs)}
+          compact={false}
         />
+        <p className="text-xs text-gray-400 mt-2">
+          Total: <span className="font-semibold text-blue-400">{minutesAndSecondsToSeconds(defaultMinutes, defaultSeconds)}</span> seconds
+        </p>
       </div>
 
       {/* Sound Alerts Toggle */}
-      <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+      <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl border border-gray-700">
+        <label className="text-sm font-semibold text-gray-300 uppercase tracking-wide">
           Sound Alerts
         </label>
         <button
@@ -154,16 +179,16 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
           onKeyDown={(e) =>
             handleKeyDown(e, () => handleUpdate({ soundAlertsEnabled: !localConfig.soundAlertsEnabled }))
           }
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+          className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
             localConfig.soundAlertsEnabled
-              ? 'bg-green-600'
-              : 'bg-gray-300 dark:bg-gray-600'
+              ? 'bg-green-500 shadow-lg shadow-green-500/30'
+              : 'bg-gray-700'
           }`}
           aria-label="Toggle sound alerts"
           tabIndex={0}
         >
           <span
-            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+            className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-all duration-300 ${
               localConfig.soundAlertsEnabled ? 'translate-x-6' : 'translate-x-1'
             }`}
           />
@@ -171,15 +196,15 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
       </div>
 
       {/* Blind Structure Templates */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+      <div className="space-y-3">
+        <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
           Blind Structure Templates
         </label>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-3 flex-wrap">
           <button
             onClick={() => handleLoadTemplate('default')}
             onKeyDown={(e) => handleKeyDown(e, () => handleLoadTemplate('default'))}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white rounded-xl font-semibold shadow-lg shadow-blue-500/30 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
             tabIndex={0}
           >
             Standard
@@ -187,7 +212,7 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
           <button
             onClick={() => handleLoadTemplate('turbo')}
             onKeyDown={(e) => handleKeyDown(e, () => handleLoadTemplate('turbo'))}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white rounded-xl font-semibold shadow-lg shadow-purple-500/30 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900"
             tabIndex={0}
           >
             Turbo
@@ -195,7 +220,7 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
           <button
             onClick={() => handleLoadTemplate('deepstack')}
             onKeyDown={(e) => handleKeyDown(e, () => handleLoadTemplate('deepstack'))}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white rounded-xl font-semibold shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-900"
             tabIndex={0}
           >
             Deep Stack
@@ -211,11 +236,11 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
       />
 
       {/* Save Button */}
-      <div className="flex gap-3">
+      <div className="flex gap-3 pt-4 border-t border-gray-800">
         <button
           onClick={handleSave}
           onKeyDown={(e) => handleKeyDown(e, handleSave)}
-          className="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+          className="flex-1 px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white font-bold rounded-xl shadow-xl shadow-green-500/30 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900"
           aria-label="Save tournament settings"
           tabIndex={0}
         >
