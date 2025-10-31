@@ -28,6 +28,15 @@ export interface TournamentConfig {
   breakConfig: BreakConfig
 }
 
+export interface TournamentPreset {
+  id: string
+  name: string
+  description?: string
+  config: TournamentConfig
+  createdAt: number // timestamp
+  isDefault?: boolean // Built-in presets (Standard, Turbo, Deep Stack)
+}
+
 export interface TimerState {
   isRunning: boolean
   isPaused: boolean

@@ -1,8 +1,9 @@
-import type { TournamentConfig } from './types'
+import type { TournamentConfig, TournamentPreset } from './types'
 import { defaultTournamentConfig } from './tournamentConfig'
 
 const STORAGE_KEY = 'pokertimer_configs'
 const CURRENT_TOURNAMENT_KEY = 'pokertimer_current'
+const PRESETS_KEY = 'pokertimer_presets'
 
 /**
  * Migrate old configs to include breakConfig if missing
@@ -105,6 +106,66 @@ export const loadCurrentTournament = (): TournamentConfig | null => {
   } catch (error) {
     console.error('Failed to load current tournament:', error)
     return null
+  }
+}
+
+/**
+ * Save a tournament preset
+ */
+export const saveTournamentPreset = (preset: TournamentPreset): void => {
+  if (typeof window === 'undefined') return
+  
+  try {
+    const presets = getAllTournamentPresets()
+    const existingIndex = presets.findIndex(p => p.id === preset.id)
+    
+    if (existingIndex >= 0) {
+      presets[existingIndex] = preset
+    } else {
+      presets.push(preset)
+    }
+    
+    localStorage.setItem(PRESETS_KEY, JSON.stringify(presets))
+  } catch (error) {
+    console.error('Failed to save tournament preset:', error)
+  }
+}
+
+/**
+ * Get all saved tournament presets
+ */
+export const getAllTournamentPresets = (): TournamentPreset[] => {
+  if (typeof window === 'undefined') return []
+  
+  try {
+    const stored = localStorage.getItem(PRESETS_KEY)
+    return stored ? JSON.parse(stored) : []
+  } catch (error) {
+    console.error('Failed to load tournament presets:', error)
+    return []
+  }
+}
+
+/**
+ * Get a specific tournament preset by ID
+ */
+export const getTournamentPreset = (id: string): TournamentPreset | null => {
+  const presets = getAllTournamentPresets()
+  return presets.find(p => p.id === id) || null
+}
+
+/**
+ * Delete a tournament preset
+ */
+export const deleteTournamentPreset = (id: string): void => {
+  if (typeof window === 'undefined') return
+  
+  try {
+    const presets = getAllTournamentPresets()
+    const filtered = presets.filter(p => p.id !== id)
+    localStorage.setItem(PRESETS_KEY, JSON.stringify(filtered))
+  } catch (error) {
+    console.error('Failed to delete tournament preset:', error)
   }
 }
 

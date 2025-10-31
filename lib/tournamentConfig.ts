@@ -1,4 +1,4 @@
-import type { TournamentConfig, BlindLevel } from './types'
+import type { TournamentConfig, BlindLevel, TournamentPreset } from './types'
 
 /**
  * Default tournament configuration
@@ -117,5 +117,56 @@ export function validateTournamentConfig(config: TournamentConfig): {
     valid: errors.length === 0,
     errors,
   }
+}
+
+/**
+ * Create default presets for the tournament library
+ */
+export function getDefaultPresets(): TournamentPreset[] {
+  const standardBlindLevels = createDefaultBlindStructure()
+  const turboBlindLevels = createTurboBlindStructure()
+  const deepStackBlindLevels = createDeepStackBlindStructure()
+
+  return [
+    {
+      id: 'preset_standard',
+      name: 'Standard Tournament',
+      description: 'Classic tournament structure with 10-minute levels',
+      isDefault: true,
+      createdAt: Date.now(),
+      config: {
+        ...defaultTournamentConfig,
+        name: 'Standard Tournament',
+        blindLevels: standardBlindLevels,
+        defaultLevelDuration: 600,
+      },
+    },
+    {
+      id: 'preset_turbo',
+      name: 'Turbo Tournament',
+      description: 'Fast-paced tournament with 5-minute levels',
+      isDefault: true,
+      createdAt: Date.now(),
+      config: {
+        ...defaultTournamentConfig,
+        name: 'Turbo Tournament',
+        blindLevels: turboBlindLevels,
+        defaultLevelDuration: 300,
+      },
+    },
+    {
+      id: 'preset_deepstack',
+      name: 'Deep Stack Tournament',
+      description: 'Slow tournament with 20-minute levels',
+      isDefault: true,
+      createdAt: Date.now(),
+      config: {
+        ...defaultTournamentConfig,
+        name: 'Deep Stack Tournament',
+        blindLevels: deepStackBlindLevels,
+        defaultLevelDuration: 1200,
+      },
+    },
+  ]
 }
 

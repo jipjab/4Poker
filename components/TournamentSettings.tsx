@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import type { TournamentConfig } from '@/lib/types'
 import { BlindLevelsEditor } from './BlindLevelsEditor'
 import { DurationPicker } from './DurationPicker'
+import { TournamentPresets } from './TournamentPresets'
 import { secondsToMinutesAndSeconds, minutesAndSecondsToSeconds } from '@/lib/timeHelpers'
 import {
   defaultTournamentConfig,
@@ -368,6 +369,23 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
           </div>
         )}
       </div>
+
+      {/* Tournament Presets */}
+      <TournamentPresets
+        onLoadPreset={(config) => {
+          setLocalConfig(config)
+          const durationParts = secondsToMinutesAndSeconds(config.defaultLevelDuration)
+          setDefaultMinutes(durationParts.minutes)
+          setDefaultSeconds(durationParts.seconds)
+          
+          const breakDurationParts = secondsToMinutesAndSeconds(config.breakConfig.duration)
+          setBreakMinutes(breakDurationParts.minutes)
+          setBreakSeconds(breakDurationParts.seconds)
+          setBreakEveryNLevels(config.breakConfig.everyNLevels)
+          setSpecificLevelsInput(config.breakConfig.specificLevels.join(', '))
+        }}
+        currentConfig={localConfig}
+      />
 
       {/* Blind Structure Templates */}
       <div className="space-y-3">
