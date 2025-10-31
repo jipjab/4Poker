@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { AdPlacement } from '@/components/AdPlacement'
+import { LogoTimerChip } from '@/components/Logo'
 
 export default function RulesPage() {
   return (
@@ -16,12 +17,23 @@ export default function RulesPage() {
               aria-label="Go to home page"
               tabIndex={0}
             >
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
-                AllInTimer
-              </h1>
-              <p className="text-xs sm:text-sm md:text-base text-gray-400 mt-1">
-                Free Poker Tournament Timer
-              </p>
+              <div className="relative flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-600 rounded-lg">
+                {/* Slit border decorative corners */}
+                <div className="absolute top-0 left-0 w-3 h-3 border-l-2 border-t-2 border-blue-500 rounded-tl-lg"></div>
+                <div className="absolute top-0 right-0 w-3 h-3 border-r-2 border-t-2 border-blue-500 rounded-tr-lg"></div>
+                <div className="absolute bottom-0 left-0 w-3 h-3 border-l-2 border-b-2 border-blue-500 rounded-bl-lg"></div>
+                <div className="absolute bottom-0 right-0 w-3 h-3 border-r-2 border-b-2 border-blue-500 rounded-br-lg"></div>
+                
+                <LogoTimerChip size="md" className="flex-shrink-0" />
+                <div>
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
+                    AllInTimer
+                  </h1>
+                  <p className="text-xs sm:text-sm md:text-base text-gray-400 mt-1">
+                    Free Poker Tournament Timer
+                  </p>
+                </div>
+              </div>
             </Link>
           </div>
           <div className="flex gap-2 sm:gap-3 items-center">
