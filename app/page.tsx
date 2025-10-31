@@ -90,7 +90,7 @@ export default function Home() {
           <Link
             href="/"
             onClick={() => setShowSettings(false)}
-            className="cursor-pointer hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg p-2 -m-2"
+            className="cursor-pointer hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded-md"
             aria-label="Go to home page"
             tabIndex={0}
           >
@@ -101,7 +101,23 @@ export default function Home() {
               Free Poker Tournament Timer
             </p>
           </Link>
-          <div className="flex gap-2 sm:gap-3 items-center w-full sm:w-auto">
+          <div className="flex gap-2 sm:gap-3 items-center">
+            <Link
+              href="/rules"
+              className="px-3 sm:px-4 py-2 sm:py-3 min-h-[44px] sm:min-h-[44px] bg-gray-600 hover:bg-gray-600 active:bg-gray-700 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 text-xs sm:text-sm flex items-center justify-center"
+              aria-label="View poker rules"
+              tabIndex={0}
+            >
+              Rules
+            </Link>
+            <Link
+              href="/hand-rankings"
+              className="px-3 sm:px-4 py-2 sm:py-3 min-h-[44px] sm:min-h-[44px] bg-gray-600 hover:bg-gray-600 active:bg-gray-700 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 text-xs sm:text-sm flex items-center justify-center"
+              aria-label="View hand rankings"
+              tabIndex={0}
+            >
+              Hand Rankings
+            </Link>
             <FullScreenToggle
               onToggle={(fullScreen) => setIsFullScreen(fullScreen)}
               className="flex-1 sm:flex-initial"
@@ -127,7 +143,7 @@ export default function Home() {
                 Welcome to PokerTimer
               </h2>
             </div>
-            <p className="text-sm sm:text-base text-gray-300 leading-relaxed space-y-2">
+            <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
               <span className="font-semibold text-white">PokerTimer</span> is a free, professional poker tournament timer that helps you manage blind levels and tournament timing effortlessly.{' '}
               Set up your custom blind structure, configure automatic level progression, and schedule breaks—all in one place.{' '}
               The timer automatically advances through levels, displays current and upcoming blinds, and provides visual and audio warnings as levels approach.{' '}
@@ -188,7 +204,7 @@ export default function Home() {
               <p className="text-xs sm:text-sm text-gray-500">
                 © {new Date().getFullYear()} PokerTimer. All rights reserved.
               </p>
-              <p className="text-xs text-gray-600 mt-1">
+              <p className="text-xs text-gray-600 mt-2">
                 Free poker tournament timer for home games, tournaments, and poker clubs.
               </p>
             </div>
