@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { AdPlacement } from '@/components/AdPlacement'
+import { PokerHand } from '@/components/PokerCard'
 
 export default function HandRankingsPage() {
   return (
@@ -79,8 +80,14 @@ export default function HandRankingsPage() {
                   <p className="text-gray-300 text-sm sm:text-base mb-3">
                     A, K, Q, J, 10, all of the same suit. This is the highest possible hand in poker.
                   </p>
-                  <div className="text-xs sm:text-sm text-gray-400 italic">
-                    Example: A♠ K♠ Q♠ J♠ 10♠
+                  <div className="mt-4">
+                    <PokerHand cards={[
+                      { rank: 'A', suit: '♠' },
+                      { rank: 'K', suit: '♠' },
+                      { rank: 'Q', suit: '♠' },
+                      { rank: 'J', suit: '♠' },
+                      { rank: '10', suit: '♠' }
+                    ]} />
                   </div>
                 </div>
               </div>
@@ -94,8 +101,14 @@ export default function HandRankingsPage() {
                   <p className="text-gray-300 text-sm sm:text-base mb-3">
                     Five consecutive cards of the same suit. The highest straight flush wins in ties.
                   </p>
-                  <div className="text-xs sm:text-sm text-gray-400 italic">
-                    Example: 7♥ 8♥ 9♥ 10♥ J♥
+                  <div className="mt-4">
+                    <PokerHand cards={[
+                      { rank: '7', suit: '♥' },
+                      { rank: '8', suit: '♥' },
+                      { rank: '9', suit: '♥' },
+                      { rank: '10', suit: '♥' },
+                      { rank: 'J', suit: '♥' }
+                    ]} />
                   </div>
                 </div>
               </div>
@@ -109,8 +122,14 @@ export default function HandRankingsPage() {
                   <p className="text-gray-300 text-sm sm:text-base mb-3">
                     Four cards of the same rank. The higher rank wins in ties. Also known as &quot;Quads.&quot;
                   </p>
-                  <div className="text-xs sm:text-sm text-gray-400 italic">
-                    Example: K♠ K♥ K♦ K♣ 7♠
+                  <div className="mt-4">
+                    <PokerHand cards={[
+                      { rank: 'K', suit: '♠' },
+                      { rank: 'K', suit: '♥' },
+                      { rank: 'K', suit: '♦' },
+                      { rank: 'K', suit: '♣' },
+                      { rank: '7', suit: '♠' }
+                    ]} />
                   </div>
                 </div>
               </div>
@@ -124,8 +143,14 @@ export default function HandRankingsPage() {
                   <p className="text-gray-300 text-sm sm:text-base mb-3">
                     Three cards of one rank and two cards of another rank. The three-of-a-kind determines the winner in ties.
                   </p>
-                  <div className="text-xs sm:text-sm text-gray-400 italic">
-                    Example: Q♠ Q♥ Q♦ 5♣ 5♠
+                  <div className="mt-4">
+                    <PokerHand cards={[
+                      { rank: 'Q', suit: '♠' },
+                      { rank: 'Q', suit: '♥' },
+                      { rank: 'Q', suit: '♦' },
+                      { rank: '5', suit: '♣' },
+                      { rank: '5', suit: '♠' }
+                    ]} />
                   </div>
                 </div>
               </div>
@@ -139,8 +164,14 @@ export default function HandRankingsPage() {
                   <p className="text-gray-300 text-sm sm:text-base mb-3">
                     Any five cards of the same suit, not in sequence. The highest card determines the winner in ties.
                   </p>
-                  <div className="text-xs sm:text-sm text-gray-400 italic">
-                    Example: A♠ 9♠ 7♠ 4♠ 2♠
+                  <div className="mt-4">
+                    <PokerHand cards={[
+                      { rank: 'A', suit: '♠' },
+                      { rank: '9', suit: '♠' },
+                      { rank: '7', suit: '♠' },
+                      { rank: '4', suit: '♠' },
+                      { rank: '2', suit: '♠' }
+                    ]} />
                   </div>
                 </div>
               </div>
@@ -154,8 +185,14 @@ export default function HandRankingsPage() {
                   <p className="text-gray-300 text-sm sm:text-base mb-3">
                     Five consecutive cards of different suits. The highest top card wins in ties. An Ace can be used as high (A-K-Q-J-10) or low (5-4-3-2-A).
                   </p>
-                  <div className="text-xs sm:text-sm text-gray-400 italic">
-                    Example: 5♠ 6♥ 7♦ 8♣ 9♠
+                  <div className="mt-4">
+                    <PokerHand cards={[
+                      { rank: '5', suit: '♠' },
+                      { rank: '6', suit: '♥' },
+                      { rank: '7', suit: '♦' },
+                      { rank: '8', suit: '♣' },
+                      { rank: '9', suit: '♠' }
+                    ]} />
                   </div>
                 </div>
               </div>
@@ -169,8 +206,14 @@ export default function HandRankingsPage() {
                   <p className="text-gray-300 text-sm sm:text-base mb-3">
                     Three cards of the same rank. Also known as &quot;Trips&quot; or &quot;Set.&quot; The highest rank wins in ties.
                   </p>
-                  <div className="text-xs sm:text-sm text-gray-400 italic">
-                    Example: 7♠ 7♥ 7♦ K♣ 4♠
+                  <div className="mt-4">
+                    <PokerHand cards={[
+                      { rank: '7', suit: '♠' },
+                      { rank: '7', suit: '♥' },
+                      { rank: '7', suit: '♦' },
+                      { rank: 'K', suit: '♣' },
+                      { rank: '4', suit: '♠' }
+                    ]} />
                   </div>
                 </div>
               </div>
@@ -184,8 +227,14 @@ export default function HandRankingsPage() {
                   <p className="text-gray-300 text-sm sm:text-base mb-3">
                     Two cards of one rank and two cards of another rank. The highest pair determines the winner in ties. If the highest pairs are equal, the second pair breaks the tie.
                   </p>
-                  <div className="text-xs sm:text-sm text-gray-400 italic">
-                    Example: A♠ A♥ 9♦ 9♣ 5♠
+                  <div className="mt-4">
+                    <PokerHand cards={[
+                      { rank: 'A', suit: '♠' },
+                      { rank: 'A', suit: '♥' },
+                      { rank: '9', suit: '♦' },
+                      { rank: '9', suit: '♣' },
+                      { rank: '5', suit: '♠' }
+                    ]} />
                   </div>
                 </div>
               </div>
@@ -199,8 +248,14 @@ export default function HandRankingsPage() {
                   <p className="text-gray-300 text-sm sm:text-base mb-3">
                     Two cards of the same rank. The highest pair wins in ties. If pairs are equal, the highest remaining card (kicker) breaks the tie.
                   </p>
-                  <div className="text-xs sm:text-sm text-gray-400 italic">
-                    Example: J♠ J♥ 9♦ 5♣ 2♠
+                  <div className="mt-4">
+                    <PokerHand cards={[
+                      { rank: 'J', suit: '♠' },
+                      { rank: 'J', suit: '♥' },
+                      { rank: '9', suit: '♦' },
+                      { rank: '5', suit: '♣' },
+                      { rank: '2', suit: '♠' }
+                    ]} />
                   </div>
                 </div>
               </div>
@@ -215,8 +270,14 @@ export default function HandRankingsPage() {
                     If no player has a pair or better, the player with the highest card wins. If the highest cards tie, 
                     the next highest card is compared, and so on until a winner is determined.
                   </p>
-                  <div className="text-xs sm:text-sm text-gray-400 italic">
-                    Example: A♠ K♥ 9♦ 5♣ 2♠
+                  <div className="mt-4">
+                    <PokerHand cards={[
+                      { rank: 'A', suit: '♠' },
+                      { rank: 'K', suit: '♥' },
+                      { rank: '9', suit: '♦' },
+                      { rank: '5', suit: '♣' },
+                      { rank: '2', suit: '♠' }
+                    ]} />
                   </div>
                 </div>
               </div>
