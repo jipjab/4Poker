@@ -28,15 +28,17 @@ export const useTimer = ({ config, onLevelChange, onTimerEnd }: UseTimerOptions)
   const breakIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const previousLevelRef = useRef(state.currentLevel)
 
-  // Update time remaining when level changes and timer is not running
+  // Update time remaining when level changes and timer is not running (but not when paused)
   useEffect(() => {
-    if (!state.isRunning) {
+    // Only update time when timer is stopped (not running and not paused) and level changes
+    // Don't reset time when paused - we want to preserve the current time
+    if (!state.isRunning && !state.isPaused) {
       const currentBlind = getCurrentBlindLevel(config, state.currentLevel)
       if (currentBlind && state.timeRemaining !== currentBlind.duration) {
         dispatch({ type: 'SET_LEVEL', level: state.currentLevel, duration: currentBlind.duration })
       }
     }
-  }, [state.currentLevel, config, state.isRunning, state.timeRemaining])
+  }, [state.currentLevel, config, state.isRunning, state.isPaused, state.timeRemaining])
 
   // Handle level changes callback
   useEffect(() => {

@@ -42,7 +42,7 @@ export const TimerControls = ({
 
   return (
     <div className="flex flex-wrap gap-3 justify-center items-center">
-      {!isRunning ? (
+      {!isRunning && !isPaused ? (
         <button
           onClick={onStart}
           onKeyDown={(e) => handleKeyDown(e, onStart)}
@@ -52,30 +52,26 @@ export const TimerControls = ({
         >
           Start
         </button>
+      ) : isPaused ? (
+        <button
+          onClick={onResume}
+          onKeyDown={(e) => handleKeyDown(e, onResume)}
+          className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          aria-label="Resume timer"
+          tabIndex={0}
+        >
+          Resume
+        </button>
       ) : (
-        <>
-          {isPaused ? (
-            <button
-              onClick={onResume}
-              onKeyDown={(e) => handleKeyDown(e, onResume)}
-              className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              aria-label="Resume timer"
-              tabIndex={0}
-            >
-              Resume
-            </button>
-          ) : (
-            <button
-              onClick={onPause}
-              onKeyDown={(e) => handleKeyDown(e, onPause)}
-              className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
-              aria-label="Pause timer"
-              tabIndex={0}
-            >
-              Pause
-            </button>
-          )}
-        </>
+        <button
+          onClick={onPause}
+          onKeyDown={(e) => handleKeyDown(e, onPause)}
+          className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+          aria-label="Pause timer"
+          tabIndex={0}
+        >
+          Pause
+        </button>
       )}
 
       <button
