@@ -39,10 +39,12 @@ A modern, mobile-friendly poker tournament blind timer built with Next.js 14, Ty
 - ✅ **Visual Card Display** - Large, colorful playing card examples for each hand type
 
 ### User Experience
-- ✅ **Sound Alerts** - Audio notifications for level changes and warnings (with mute option)
+- ✅ **Sound Alerts** - Audio notifications for level changes and warnings (muted by default, toggle with mute button)
 - ✅ **Local Storage** - Automatic saving of tournament configurations
-- ✅ **Keyboard Shortcuts** - F11 for fullscreen toggle
+- ✅ **Keyboard Shortcuts** - F11 for fullscreen toggle, Esc to exit fullscreen
 - ✅ **Modern UI** - Clean, polished interface with card-based layouts
+- ✅ **Consistent Design** - Uniform header, footer, and spacing across all pages
+- ✅ **Tournament Summary** - Interactive table showing all levels with click-to-jump functionality
 
 ### SEO & Performance
 - ✅ **SEO Optimized** - Comprehensive metadata, Open Graph, and Twitter Cards
@@ -119,14 +121,17 @@ npm start
 - **Monitor Progress**: View current level, next blinds, time remaining, and total elapsed time
 - **Visual Warnings**: Watch for color changes (yellow at 30s, red at 10s) before level ends
 - **Control Timer**: Use pause/resume/reset controls as needed
-- **Level Navigation**: Jump to any level or move to previous/next levels
+- **Level Navigation**: Jump to any level by clicking on it in the Tournament Summary table, or use previous/next controls
 - **Start Breaks**: When available, use the "Start Break" button to pause the tournament
+- **Sound Controls**: Toggle sound alerts on/off using the mute button (muted by default)
 
 ### Presentation Mode
 
-- Click the "Fullscreen" button or press F11 to enter presentation mode
+- Click the "Fullscreen" button (visible when settings are closed) or press F11 to enter presentation mode
 - Large, clear display optimized for projectors and TV screens
 - Timer controls remain accessible in fullscreen mode
+- Press Esc or F11 again to exit fullscreen mode
+- Site logo and URL remain visible in fullscreen for branding
 
 ### Reading Rules & Hand Rankings
 
@@ -165,6 +170,7 @@ npm start
 │   ├── BlindDisplay.tsx          # Current/next blinds
 │   ├── TimerControls.tsx         # Timer control buttons
 │   ├── TournamentSettings.tsx    # Settings panel
+│   ├── TournamentSummary.tsx     # Tournament summary table
 │   ├── BlindLevelsEditor.tsx    # Blind structure editor
 │   ├── DurationPicker.tsx        # Minutes/seconds selector
 │   ├── BreakTimer.tsx            # Break countdown display
@@ -236,6 +242,10 @@ See [`DEPENDENCY_WARNINGS.md`](./DEPENDENCY_WARNINGS.md) for detailed informatio
 - [x] Advertisement placements
 - [x] Mobile-friendly optimizations
 - [x] Keyboard shortcuts
+- [x] Design consistency across all pages (header, footer, spacing, typography)
+- [x] Tournament summary table with clickable level navigation
+- [x] Sound muted by default with visible toggle button
+- [x] Conditional UI visibility (fullscreen button hidden when settings open)
 
 ## 🔮 Future Enhancements (Pro Tier Ideas)
 
@@ -278,14 +288,17 @@ For support and questions, please refer to the documentation or open an issue on
 
 ### [1.0.0] - Current Release
 - ✅ Complete timer functionality with breaks and level jumps
-- ✅ Fullscreen/presentation mode
+- ✅ Fullscreen/presentation mode with keyboard shortcuts
 - ✅ Visual warnings and color-coded timer
 - ✅ Texas Hold'Em rules and hand rankings pages
 - ✅ SEO optimization and structured data
 - ✅ Modern UI with logo and branding
 - ✅ Mobile-friendly design
-- ✅ Sound alerts with mute option
+- ✅ Sound alerts muted by default with visible toggle
 - ✅ Advertisement placement structure
+- ✅ Consistent design system across all pages
+- ✅ Tournament summary table with interactive level navigation
+- ✅ Conditional UI visibility for improved UX
 
 ---
 
