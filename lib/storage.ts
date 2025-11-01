@@ -6,16 +6,20 @@ const CURRENT_TOURNAMENT_KEY = 'pokertimer_current'
 const PRESETS_KEY = 'pokertimer_presets'
 
 /**
- * Migrate old configs to include breakConfig if missing
+ * Migrate old configs to include breakConfig if missing and force soundAlertsEnabled to false
  */
 const migrateConfig = (config: any): TournamentConfig => {
-  if (!config.breakConfig) {
-    return {
-      ...config,
-      breakConfig: defaultTournamentConfig.breakConfig,
-    }
+  const migrated: any = { ...config }
+  
+  // Add breakConfig if missing
+  if (!migrated.breakConfig) {
+    migrated.breakConfig = defaultTournamentConfig.breakConfig
   }
-  return config as TournamentConfig
+  
+  // Always force soundAlertsEnabled to false (muted by default)
+  migrated.soundAlertsEnabled = false
+  
+  return migrated as TournamentConfig
 }
 
 /**

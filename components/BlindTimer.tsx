@@ -14,11 +14,10 @@ interface BlindTimerProps {
   config: TournamentConfig
   onConfigUpdate?: (config: TournamentConfig) => void
   isFullScreen?: boolean
+  onJumpToLevel?: (level: number) => void
 }
 
-export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: BlindTimerProps) => {
-  const [isMuted, setIsMuted] = useState(false)
-
+export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false, onJumpToLevel: externalJumpToLevel }: BlindTimerProps) => {
   const timer = useTimer({
     config,
     onLevelChange: (level) => {
@@ -32,12 +31,34 @@ export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: Bli
     },
   })
 
-  // Use muted state to override soundAlertsEnabled
-  const soundsEnabled = config.soundAlertsEnabled && !isMuted
+  // Use soundAlertsEnabled directly from config (muted by default since soundAlertsEnabled defaults to false)
+  const soundsEnabled = config.soundAlertsEnabled
   const sounds = useSoundAlerts(soundsEnabled)
+  
+  const handleToggleSound = () => {
+    if (onConfigUpdate) {
+      onConfigUpdate({
+        ...config,
+        soundAlertsEnabled: !config.soundAlertsEnabled,
+      })
+    }
+  }
   const previousTimeRef = useRef(timer.timeRemaining)
   const previousLevelRef = useRef(timer.currentLevel)
   const previousBreakActiveRef = useRef(timer.isBreakActive)
+  const levelChangedFromTimerRef = useRef(false)
+  const levelChangedFromTableRef = useRef(false)
+
+  // Sync timer when level changes externally (e.g., from Tournament Summary table click)
+  useEffect(() => {
+    if (config.currentLevel !== timer.currentLevel) {
+      // External level change from table - mark it so sound plays regardless of direction
+      levelChangedFromTimerRef.current = false
+      levelChangedFromTableRef.current = true
+      timer.setLevel(config.currentLevel)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config.currentLevel])
 
   // Play sounds for timer warnings
   useEffect(() => {
@@ -62,14 +83,36 @@ export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: Bli
     previousTimeRef.current = currentTime
   }, [timer.timeRemaining, timer.isRunning, timer.isPaused, timer.isBreakActive, sounds])
 
-  // Play sound on level change (detect when level advances)
+  // Play sound on level change - detect when level changes naturally (timer reaches zero) or from table
   useEffect(() => {
-    // Only play sound when level advances forward (not when jumping backwards or resetting)
-    if (previousLevelRef.current !== timer.currentLevel && timer.currentLevel > previousLevelRef.current) {
-      sounds.playLevelChangeSound()
+    const levelChanged = previousLevelRef.current !== timer.currentLevel
+    
+    if (levelChanged) {
+      // Check if this is a natural progression (forward) or a manual jump
+      const isForwardProgression = timer.currentLevel > previousLevelRef.current
+      
+      // Play sound for:
+      // 1. Natural forward progression (timer reached zero)
+      // 2. Table clicks (regardless of direction)
+      // 3. Forward manual jumps
+      if (isForwardProgression || levelChangedFromTimerRef.current || levelChangedFromTableRef.current) {
+        sounds.playLevelChangeSound()
+        levelChangedFromTimerRef.current = false // Reset flag
+        levelChangedFromTableRef.current = false // Reset flag
+      }
+      
+      // Update ref
+      previousLevelRef.current = timer.currentLevel
     }
-    previousLevelRef.current = timer.currentLevel
   }, [timer.currentLevel, sounds])
+  
+  // Track when timer naturally advances to next level (when it reaches zero)
+  useEffect(() => {
+    // When timer reaches exactly zero and was running, this indicates natural level progression
+    if (timer.timeRemaining === 0 && timer.isRunning && !timer.isPaused) {
+      levelChangedFromTimerRef.current = true
+    }
+  }, [timer.timeRemaining, timer.isRunning, timer.isPaused])
 
   // Play sounds for break events
   useEffect(() => {
@@ -87,6 +130,9 @@ export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: Bli
     timer.setLevel(level)
     if (onConfigUpdate) {
       onConfigUpdate({ ...config, currentLevel: level })
+    }
+    if (externalJumpToLevel) {
+      externalJumpToLevel(level)
     }
   }
 
@@ -160,34 +206,33 @@ export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: Bli
     )
   }
 
-  return (
-    <div className="w-full max-w-4xl mx-auto space-y-6 sm:space-y-8">
-      {/* Timer Display */}
-      <div className="text-center">
-        <div className={`text-5xl sm:text-6xl md:text-8xl font-bold font-mono mb-3 sm:mb-4 transition-colors duration-300 ${timerTextColor}`}>
-          {formatTime(timer.timeRemaining)}
-        </div>
-        <div className="flex items-center justify-center gap-2 sm:gap-3">
-          <div className="text-base sm:text-lg text-gray-400">
-            {timer.isRunning && !timer.isPaused ? 'Running' : timer.isPaused ? 'Paused' : 'Ready'}
-          </div>
-          {/* Mute Button */}
-          {config.soundAlertsEnabled && (
+         return (
+           <div className="w-full max-w-4xl mx-auto space-y-2 sm:space-y-3 flex flex-col h-full justify-between">
+             {/* Timer Display */}
+             <div className="text-center mt-2 sm:mt-3">
+               <div className={`text-7xl sm:text-8xl md:text-9xl font-bold font-mono mb-1 sm:mb-2 transition-colors duration-300 ${timerTextColor}`}>
+                 {formatTime(timer.timeRemaining)}
+               </div>
+               <div className="flex items-center justify-center gap-2">
+                 <div className="text-xs sm:text-sm text-gray-400">
+                   {timer.isRunning && !timer.isPaused ? 'Running' : timer.isPaused ? 'Paused' : 'Ready'}
+                 </div>
+          {/* Mute/Unmute Button - Always visible */}
             <button
-              onClick={() => setIsMuted(!isMuted)}
-              onKeyDown={(e) => handleKeyDown(e, () => setIsMuted(!isMuted))}
-              className={`p-3 sm:p-2 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-95 ${
-                isMuted
+              onClick={handleToggleSound}
+              onKeyDown={(e) => handleKeyDown(e, handleToggleSound)}
+              className={`p-1.5 sm:p-1.5 min-w-[32px] min-h-[32px] sm:min-w-[36px] sm:min-h-[36px] rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-95 ${
+                !config.soundAlertsEnabled
                   ? 'bg-red-900/30 text-red-400 active:bg-red-900/50'
                   : 'bg-gray-700/50 text-gray-400 active:bg-gray-700 active:text-white'
               }`}
-              aria-label={isMuted ? 'Unmute sound alerts' : 'Mute sound alerts'}
+              aria-label={!config.soundAlertsEnabled ? 'Unmute sound alerts' : 'Mute sound alerts'}
               tabIndex={0}
-              title={isMuted ? 'Sound alerts muted - Click to unmute' : 'Sound alerts enabled - Click to mute'}
+              title={!config.soundAlertsEnabled ? 'Sound alerts muted - Click to unmute' : 'Sound alerts enabled - Click to mute'}
             >
-              {isMuted ? (
+              {!config.soundAlertsEnabled ? (
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -208,7 +253,7 @@ export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: Bli
                 </svg>
               ) : (
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -223,12 +268,11 @@ export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: Bli
                 </svg>
               )}
             </button>
-          )}
         </div>
       </div>
 
-      {/* Progress Bar */}
-      <div className="w-full bg-gray-700 rounded-full h-3 sm:h-4 overflow-hidden">
+             {/* Progress Bar */}
+             <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3 overflow-hidden">
         <div
           className={`h-full ${progressBarGradient} transition-all duration-1000 ease-linear`}
           style={{ width: `${Math.min(progressPercentage, 100)}%` }}
@@ -274,10 +318,10 @@ export const BlindTimer = ({ config, onConfigUpdate, isFullScreen = false }: Bli
         totalLevels={config.blindLevels.length}
       />
 
-      {/* Level Progress Indicator */}
-      <div className="text-center text-sm text-gray-400">
-        Total Time: {formatTime(timer.totalElapsed)}
-      </div>
+             {/* Level Progress Indicator */}
+             <div className="text-center text-xs text-gray-400">
+               Total Time: {formatTime(timer.totalElapsed)}
+             </div>
     </div>
   )
 }

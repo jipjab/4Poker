@@ -242,32 +242,6 @@ export const TournamentSettings = ({ config, onSave, onClose }: TournamentSettin
         </p>
       </div>
 
-      {/* Sound Alerts Toggle */}
-      <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl border border-gray-700">
-        <label className="text-sm font-semibold text-gray-300 uppercase tracking-wide">
-          Sound Alerts
-        </label>
-        <button
-          onClick={() => handleUpdate({ soundAlertsEnabled: !localConfig.soundAlertsEnabled })}
-          onKeyDown={(e) =>
-            handleKeyDown(e, () => handleUpdate({ soundAlertsEnabled: !localConfig.soundAlertsEnabled }))
-          }
-          className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
-            localConfig.soundAlertsEnabled
-              ? 'bg-green-500 shadow-lg shadow-green-500/30'
-              : 'bg-gray-700'
-          }`}
-          aria-label="Toggle sound alerts"
-          tabIndex={0}
-        >
-          <span
-            className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-all duration-300 ${
-              localConfig.soundAlertsEnabled ? 'translate-x-6' : 'translate-x-1'
-            }`}
-          />
-        </button>
-      </div>
-
       {/* Break Configuration */}
       <div className="space-y-6 bg-gray-800/30 p-6 rounded-xl border border-gray-700">
         <div className="flex items-center justify-between pb-2 border-b border-gray-700">

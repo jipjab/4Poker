@@ -9,7 +9,7 @@ export const defaultTournamentConfig: TournamentConfig = {
   startingChips: 10000,
   blindLevels: createDefaultBlindStructure(),
   defaultLevelDuration: 600, // 10 minutes
-  soundAlertsEnabled: true,
+  soundAlertsEnabled: false,
   currentLevel: 0,
   breakConfig: {
     enabled: false,

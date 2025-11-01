@@ -6,40 +6,38 @@ import { LogoTimerChip } from '@/components/Logo'
 
 export default function RulesPage() {
   return (
-    <main className="min-h-screen p-3 sm:p-4 md:p-8 bg-background">
+    <main className="min-h-screen p-2 sm:p-3 bg-background">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
-          <div>
-            <Link
-              href="/"
-              className="cursor-pointer hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded-md"
-              aria-label="Go to home page"
-              tabIndex={0}
-            >
-              <div className="relative flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-600 rounded-lg">
-                {/* Slit border decorative corners */}
-                <div className="absolute top-0 left-0 w-3 h-3 border-l-2 border-t-2 border-blue-500 rounded-tl-lg"></div>
-                <div className="absolute top-0 right-0 w-3 h-3 border-r-2 border-t-2 border-blue-500 rounded-tr-lg"></div>
-                <div className="absolute bottom-0 left-0 w-3 h-3 border-l-2 border-b-2 border-blue-500 rounded-bl-lg"></div>
-                <div className="absolute bottom-0 right-0 w-3 h-3 border-r-2 border-b-2 border-blue-500 rounded-br-lg"></div>
-                
-                <LogoTimerChip size="md" className="flex-shrink-0" />
-                <div>
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
-                    AllInTimer
-                  </h1>
-                  <p className="text-xs sm:text-sm md:text-base text-gray-400 mt-1">
-                    Free Poker Tournament Timer
-                  </p>
-                </div>
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-3 mb-2 flex-shrink-0">
+          <Link
+            href="/"
+            className="cursor-pointer hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded-md"
+            aria-label="Go to home page"
+            tabIndex={0}
+          >
+            <div className="relative flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-600 rounded-lg">
+              {/* Slit border decorative corners */}
+              <div className="absolute top-0 left-0 w-3 h-3 border-l-2 border-t-2 border-blue-500 rounded-tl-lg"></div>
+              <div className="absolute top-0 right-0 w-3 h-3 border-r-2 border-t-2 border-blue-500 rounded-tr-lg"></div>
+              <div className="absolute bottom-0 left-0 w-3 h-3 border-l-2 border-b-2 border-blue-500 rounded-bl-lg"></div>
+              <div className="absolute bottom-0 right-0 w-3 h-3 border-r-2 border-b-2 border-blue-500 rounded-br-lg"></div>
+              
+              <LogoTimerChip size="sm" className="flex-shrink-0" />
+              <div>
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold">
+                  <span className="text-white">All</span><span className="text-blue-400">in</span><span className="text-white">Timer</span>
+                </h1>
+                <p className="text-xs text-gray-400">
+                  Free Poker Tournament Timer
+                </p>
               </div>
-            </Link>
-          </div>
+            </div>
+          </Link>
           <div className="flex gap-2 sm:gap-3 items-center">
             <Link
               href="/"
-              className="px-3 sm:px-4 py-2 sm:py-3 min-h-[44px] sm:min-h-[44px] bg-gray-600 hover:bg-gray-600 active:bg-gray-700 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 text-xs sm:text-sm flex items-center justify-center"
+              className="px-2 sm:px-3 py-1.5 sm:py-2 min-h-[36px] sm:min-h-[40px] bg-gray-600 hover:bg-gray-600 active:bg-gray-700 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 text-xs flex items-center justify-center"
               aria-label="Go to home page"
               tabIndex={0}
             >
@@ -47,7 +45,7 @@ export default function RulesPage() {
             </Link>
             <Link
               href="/rules"
-              className="px-3 sm:px-4 py-2 sm:py-3 min-h-[44px] sm:min-h-[44px] bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 text-xs sm:text-sm flex items-center justify-center"
+              className="px-2 sm:px-3 py-1.5 sm:py-2 min-h-[36px] sm:min-h-[40px] bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 text-xs flex items-center justify-center"
               aria-label="View poker rules"
               tabIndex={0}
             >
@@ -55,7 +53,7 @@ export default function RulesPage() {
             </Link>
             <Link
               href="/hand-rankings"
-              className="px-3 sm:px-4 py-2 sm:py-3 min-h-[44px] sm:min-h-[44px] bg-gray-600 hover:bg-gray-600 active:bg-gray-700 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 text-xs sm:text-sm flex items-center justify-center"
+              className="px-2 sm:px-3 py-1.5 sm:py-2 min-h-[36px] sm:min-h-[40px] bg-gray-600 hover:bg-gray-600 active:bg-gray-700 text-white font-semibold rounded-lg shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 text-xs flex items-center justify-center"
               aria-label="View hand rankings"
               tabIndex={0}
             >
@@ -65,11 +63,11 @@ export default function RulesPage() {
         </header>
 
         {/* Page Title */}
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2">
+        <div className="mb-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1">
             Texas Hold&apos;Em Poker Rules
           </h1>
-          <p className="text-gray-400 text-sm sm:text-base">
+          <p className="text-gray-400 text-xs sm:text-sm">
             Learn the basics of Texas Hold&apos;Em poker
           </p>
         </div>
@@ -77,11 +75,11 @@ export default function RulesPage() {
         {/* Content */}
         <div className="space-y-6 sm:space-y-8">
           {/* Overview */}
-          <section className="bg-gray-800 rounded-xl p-6 sm:p-8 border border-gray-700 shadow-xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+          <section className="bg-gray-800 rounded-xl p-3 sm:p-4 border border-gray-700 shadow-xl">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
               Game Overview
             </h2>
-            <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+            <p className="text-gray-300 leading-relaxed text-xs sm:text-sm">
               Texas Hold&apos;Em is the most popular form of poker. Each player receives two private cards (hole cards) 
               and shares five community cards with all players. The goal is to make the best five-card hand using 
               any combination of your two hole cards and the five community cards, or by betting in a way that 
@@ -90,30 +88,30 @@ export default function RulesPage() {
           </section>
 
           {/* Setup */}
-          <section className="bg-gray-800 rounded-xl p-6 sm:p-8 border border-gray-700 shadow-xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+          <section className="bg-gray-800 rounded-xl p-3 sm:p-4 border border-gray-700 shadow-xl">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
               Setup
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-2">
               <div>
-                <h3 className="text-xl font-semibold text-blue-400 mb-2">Players</h3>
-                <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                <h3 className="text-base sm:text-lg font-semibold text-blue-400 mb-1">Players</h3>
+                <p className="text-gray-300 leading-relaxed text-xs sm:text-sm">
                   Texas Hold&apos;Em can be played with 2 to 10 players at a single table.
                 </p>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-blue-400 mb-2">Blinds</h3>
-                <p className="text-gray-300 leading-relaxed text-sm sm:text-base mb-2">
+                <h3 className="text-base sm:text-lg font-semibold text-blue-400 mb-1">Blinds</h3>
+                <p className="text-gray-300 leading-relaxed text-xs sm:text-sm mb-2">
                   Before each hand, two forced bets are posted:
                 </p>
-                <ul className="list-disc list-inside space-y-2 text-gray-300 text-sm sm:text-base ml-4">
+                <ul className="list-disc list-inside space-y-2 text-gray-300 text-xs sm:text-sm ml-4">
                   <li><span className="font-semibold text-white">Small Blind:</span> Posted by the player to the left of the dealer, typically half the minimum bet.</li>
                   <li><span className="font-semibold text-white">Big Blind:</span> Posted by the player to the left of the small blind, equal to the minimum bet.</li>
                 </ul>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-blue-400 mb-2">Dealer Button</h3>
-                <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                <h3 className="text-base sm:text-lg font-semibold text-blue-400 mb-1">Dealer Button</h3>
+                <p className="text-gray-300 leading-relaxed text-xs sm:text-sm">
                   A marker (dealer button) rotates clockwise after each hand, indicating the dealer position. 
                   The blinds are posted relative to this button position.
                 </p>
@@ -122,8 +120,8 @@ export default function RulesPage() {
           </section>
 
           {/* Betting Rounds */}
-          <section className="bg-gray-800 rounded-xl p-6 sm:p-8 border border-gray-700 shadow-xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+          <section className="bg-gray-800 rounded-xl p-3 sm:p-4 border border-gray-700 shadow-xl">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
               Betting Rounds
             </h2>
             <div className="space-y-6">
@@ -131,11 +129,11 @@ export default function RulesPage() {
                 <h3 className="text-xl font-semibold text-yellow-400 mb-2">
                   1. Pre-Flop
                 </h3>
-                <p className="text-gray-300 leading-relaxed text-sm sm:text-base mb-2">
+                <p className="text-gray-300 leading-relaxed text-xs sm:text-sm mb-2">
                   After receiving two hole cards (dealt face down), the first betting round begins. Action starts 
                   with the player to the left of the big blind and proceeds clockwise.
                 </p>
-                <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                <p className="text-gray-300 leading-relaxed text-xs sm:text-sm">
                   Players can <span className="font-semibold text-white">fold</span> (discard their hand), 
                   <span className="font-semibold text-white"> call</span> (match the big blind), or 
                   <span className="font-semibold text-white"> raise</span> (increase the bet).
@@ -146,7 +144,7 @@ export default function RulesPage() {
                 <h3 className="text-xl font-semibold text-green-400 mb-2">
                   2. The Flop
                 </h3>
-                <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                <p className="text-gray-300 leading-relaxed text-xs sm:text-sm">
                   After the pre-flop betting round, the dealer burns one card (removes it from play) and deals 
                   three community cards face up in the center of the table. This is called &quot;the flop.&quot; Another 
                   betting round follows, starting with the player to the left of the dealer button.
@@ -154,10 +152,10 @@ export default function RulesPage() {
               </div>
 
               <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700">
-                <h3 className="text-xl font-semibold text-blue-400 mb-2">
+                <h3 className="text-base sm:text-lg font-semibold text-blue-400 mb-1">
                   3. The Turn
                 </h3>
-                <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                <p className="text-gray-300 leading-relaxed text-xs sm:text-sm">
                   After the flop betting round, the dealer burns another card and deals a fourth community card 
                   (the &quot;turn&quot; or &quot;fourth street&quot;). A third betting round follows.
                 </p>
@@ -167,7 +165,7 @@ export default function RulesPage() {
                 <h3 className="text-xl font-semibold text-purple-400 mb-2">
                   4. The River
                 </h3>
-                <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                <p className="text-gray-300 leading-relaxed text-xs sm:text-sm">
                   After the turn betting round, the dealer burns one more card and deals the fifth and final 
                   community card (the &quot;river&quot; or &quot;fifth street&quot;). The final betting round follows.
                 </p>
@@ -176,23 +174,23 @@ export default function RulesPage() {
           </section>
 
           {/* Showdown */}
-          <section className="bg-gray-800 rounded-xl p-6 sm:p-8 border border-gray-700 shadow-xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+          <section className="bg-gray-800 rounded-xl p-3 sm:p-4 border border-gray-700 shadow-xl">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
               Showdown
             </h2>
             <p className="text-gray-300 leading-relaxed text-sm sm:text-base mb-4">
               If more than one player remains after the final betting round, a showdown occurs. All remaining 
               players reveal their hole cards, and the player with the best five-card hand wins the pot.
             </p>
-            <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+            <p className="text-gray-300 leading-relaxed text-xs sm:text-sm">
               Players can use both, one, or neither of their hole cards in combination with the five community 
               cards to make their best hand.
             </p>
           </section>
 
           {/* Hand Rankings */}
-          <section className="bg-gray-800 rounded-xl p-6 sm:p-8 border border-gray-700 shadow-xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+          <section className="bg-gray-800 rounded-xl p-3 sm:p-4 border border-gray-700 shadow-xl">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
               Hand Rankings
             </h2>
             <p className="text-gray-300 leading-relaxed text-sm sm:text-base mb-6">
@@ -224,28 +222,28 @@ export default function RulesPage() {
           </section>
 
           {/* Additional Rules */}
-          <section className="bg-gray-800 rounded-xl p-6 sm:p-8 border border-gray-700 shadow-xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+          <section className="bg-gray-800 rounded-xl p-3 sm:p-4 border border-gray-700 shadow-xl">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
               Additional Rules
             </h2>
             <div className="space-y-4">
               <div>
                 <h3 className="text-xl font-semibold text-cyan-400 mb-2">Betting Limits</h3>
-                <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                <p className="text-gray-300 leading-relaxed text-xs sm:text-sm">
                   Texas Hold&apos;Em can be played with no limit (players can bet all their chips), pot limit (maximum 
                   bet equals the pot size), or fixed limit (betting amounts are predetermined).
                 </p>
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-cyan-400 mb-2">All-In</h3>
-                <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                <p className="text-gray-300 leading-relaxed text-xs sm:text-sm">
                   If a player bets all their remaining chips, they are &quot;all-in.&quot; Other players can still bet, 
                   but side pots may be created if not all players have enough chips to match the bet.
                 </p>
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-cyan-400 mb-2">Tournament Play</h3>
-                <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                <p className="text-gray-300 leading-relaxed text-xs sm:text-sm">
                   In tournaments, blinds increase at regular intervals. Players are eliminated when they lose all 
                   their chips. The tournament continues until one player has all the chips.
                 </p>
@@ -255,18 +253,22 @@ export default function RulesPage() {
 
         </div>
 
-        {/* Footer with Advertisement */}
-        <footer className="mt-8 space-y-4">
-          <AdPlacement size="banner" className="max-w-6xl mx-auto" />
+        {/* Footer Banner Ad */}
+        <footer className="mt-2 space-y-1 flex-shrink-0">
+          <AdPlacement size="banner" className="max-w-4xl mx-auto" />
           
           {/* Footer Info */}
-          <div className="text-center space-y-3 pb-6">
-            <div className="pt-4 border-t border-gray-800">
-              <p className="text-xs sm:text-sm text-gray-500">
-                © {new Date().getFullYear()} AllInTimer. All rights reserved.
+          <div className="text-center space-y-1 pb-1">
+            <div className="text-xs text-gray-400">
+              <p>
+                Tournament: <span className="font-semibold text-gray-300">Texas Hold&apos;Em Rules</span>
               </p>
-              <p className="text-xs text-gray-600 mt-2">
-                Free poker tournament timer for home games, tournaments, and poker clubs.
+            </div>
+            
+            {/* Copyright */}
+            <div className="pt-1 border-t border-gray-800">
+              <p className="text-xs text-gray-500">
+                © {new Date().getFullYear()} AllInTimer. All rights reserved.
               </p>
             </div>
           </div>
